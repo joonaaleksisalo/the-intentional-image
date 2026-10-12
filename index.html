@@ -82,9 +82,9 @@
   .sticky-buy-label-mobile{display:none;}
   .sticky-buy-meta-mobile{display:none;}
   .consent-banner{
-    position:fixed; right:20px; bottom:20px; left:20px; z-index:20;
+    position:fixed; right:24px; bottom:24px; left:auto; z-index:20;
     display:flex; align-items:center; justify-content:space-between; gap:24px;
-    max-width:760px; margin:0 auto; padding:20px 24px;
+    width:min(760px,calc(100vw - 48px)); margin:0; padding:20px 24px;
     border:1px solid rgba(242,240,234,.12); border-radius:4px;
     background:rgba(20,24,27,.97); color:var(--text);
     box-shadow:0 12px 40px rgba(0,0,0,.35);
@@ -124,7 +124,7 @@
     .sticky-buy-meta-desktop{display:none;}
     .sticky-buy-meta-mobile{display:inline;}
     .sticky-buy:hover{background:linear-gradient(180deg,rgba(255,255,255,.025),rgba(255,255,255,.005)),rgba(12,15,17,.9);}
-    .consent-banner{right:12px; bottom:max(12px,env(safe-area-inset-bottom,0px)); left:12px; flex-direction:column; align-items:stretch; gap:14px; padding:16px;}
+    .consent-banner{right:12px; bottom:max(12px,env(safe-area-inset-bottom,0px)); left:12px; width:auto; flex-direction:column; align-items:stretch; gap:14px; padding:16px;}
     .consent-actions{display:grid; grid-template-columns:1fr 1fr;}
     .consent-action{padding:9px 8px;}
   }
