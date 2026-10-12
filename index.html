@@ -5,6 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="color-scheme" content="dark">
 <title>The Intentional Image · Joona Salo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
 <style>
   /* Bebas Neue Regular, Copyright 2010 Dharma Type; SIL Open Font License 1.1. */
   @font-face{
@@ -18,7 +21,7 @@
     --text:#f2f0ea; --text-dim:#9aa0a3; --line:#2b3238;
     --inv-bg:#f2f0ea; --inv-text:#14181b;
     --serif: Georgia, 'Iowan Old Style', 'Times New Roman', serif;
-    --sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    --sans: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
     --punch: Impact, 'Arial Narrow Bold', Haettenschweiler, 'Franklin Gothic Bold', sans-serif;
   }
   :root{
@@ -26,7 +29,7 @@
     --text:#f2f0ea; --text-dim:#9aa0a3; --line:#2b3238;
     --inv-bg:#f2f0ea; --inv-text:#14181b;
     --serif: Georgia, 'Iowan Old Style', 'Times New Roman', serif;
-    --sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    --sans: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
   }
   *{box-sizing:border-box;}
   html{scroll-behavior:smooth; scroll-padding-top: env(safe-area-inset-top,0px);}
@@ -51,18 +54,18 @@
   .btn-buy, .btn-ghost{
     display:inline-flex; align-items:center; justify-content:center;
     min-width:200px; padding:16px 24px; border-radius:2px; font-size:16px;
-    text-decoration:none; cursor:pointer;
+    text-decoration:none; cursor:pointer; letter-spacing:0;
   }
   .btn-buy{
     background:#c5e86c; color:#1b211d; font-weight:700; border:none;
-    letter-spacing:.02em; transition:transform .2s ease, box-shadow .2s ease, background-color .2s ease;
+    transition:transform .2s ease, box-shadow .2s ease, background-color .2s ease;
   }
   .btn-buy:hover{transform:translateY(-2px); background:#b5d65e; box-shadow:0 10px 30px rgba(0,0,0,.25);}
   .btn-ghost{
     background:transparent; color:var(--text); border:1px solid var(--line); font-weight:600;
-    transition:border-color .2s ease, background .2s ease;
+    transition:transform .2s ease, border-color .2s ease, background .2s ease;
   }
-  .btn-ghost:hover{border-color:var(--text-dim); background:var(--bg-alt);}
+  .btn-ghost:hover{transform:translateY(-2px); border-color:var(--text-dim); background:rgba(242,240,234,.035);}
   .details-separator{display:inline-block; margin:0 .75em; white-space:nowrap;}
   .purchase-ticker{position:relative; z-index:8; display:flex; align-items:center; height:48px; overflow:hidden; padding:0; background:linear-gradient(180deg,rgba(255,255,255,.045),rgba(255,255,255,.015)),rgba(34,40,44,.82); -webkit-backdrop-filter:blur(12px) saturate(120%); backdrop-filter:blur(12px) saturate(120%); border-top:1px solid rgba(242,240,234,.08); border-bottom:1px solid rgba(242,240,234,.07); box-shadow:inset 0 .5px rgba(255,255,255,.035);}
   .ticker-track{display:flex; width:max-content; animation:ticker-scroll 44s linear infinite;}
@@ -77,23 +80,53 @@
   .sticky-buy:hover{background:var(--inv-bg);}
   .sticky-buy-details{display:none;}
   .sticky-buy-label-mobile{display:none;}
+  .sticky-buy-meta-mobile{display:none;}
+  .consent-banner{
+    position:fixed; right:20px; bottom:20px; left:20px; z-index:20;
+    display:flex; align-items:center; justify-content:space-between; gap:24px;
+    max-width:760px; margin:0 auto; padding:20px 24px;
+    border:1px solid rgba(242,240,234,.12); border-radius:4px;
+    background:rgba(20,24,27,.97); color:var(--text);
+    box-shadow:0 12px 40px rgba(0,0,0,.35);
+  }
+  .consent-banner[hidden]{display:none;}
+  .consent-copy{min-width:0;}
+  .consent-title{display:block; margin-bottom:4px; color:var(--text-dim); font-size:13px; font-weight:400; line-height:1.5;}
+  .consent-actions{display:flex; flex:0 0 auto; gap:8px;}
+  .consent-action{
+    min-height:40px; padding:9px 12px; border:1px solid var(--line); border-radius:2px;
+    background:transparent; color:var(--text); font:inherit; font-size:12px; font-weight:600; cursor:pointer;
+  }
+  .consent-action:hover{background:rgba(242,240,234,.06);}
+  .consent-action-accept{border-color:#c5e86c; background:#c5e86c; color:#1b211d;}
+  .consent-action-accept:hover{background:#b5d65e;}
+  .consent-settings-link{padding:0; border:0; background:none; color:var(--text-dim); font:inherit; font-size:11px; text-decoration:underline; text-underline-offset:3px; cursor:pointer;}
+  .consent-settings-link:hover{color:var(--text);}
   @media(max-width:767px){
     .sticky-buy{
       top:auto; right:0; bottom:0; left:0;
       display:flex; align-items:center; justify-content:space-between; gap:12px; width:100%; min-width:0;
-      padding:max(16px,env(safe-area-inset-top,0px)) max(16px,env(safe-area-inset-right,0px)) max(16px,env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));
+      padding:max(20px,env(safe-area-inset-top,0px)) max(24px,env(safe-area-inset-right,0px)) max(20px,env(safe-area-inset-bottom,0px)) max(24px,env(safe-area-inset-left,0px));
       border:1px solid rgba(242,240,234,.05); border-left:0; border-right:0; border-bottom:0; border-radius:0;
       background:linear-gradient(180deg,rgba(255,255,255,.025),rgba(255,255,255,.005)),rgba(12,15,17,.9);
       -webkit-backdrop-filter:blur(10px) saturate(110%); backdrop-filter:blur(10px) saturate(110%);
       box-shadow:inset 0 .5px rgba(255,255,255,.02); transform:translateY(10px);
     }
-    .sticky-buy-details{display:flex; min-width:0; flex-direction:column; gap:2px; text-decoration:none;}
+    .sticky-buy-details{display:flex; min-width:0; flex-direction:column; gap:8px; text-decoration:none;}
     .sticky-buy-price{color:var(--text); font-size:16px; font-weight:700; line-height:1.25;}
+    .sticky-buy-price-mobile{display:none;}
     .sticky-buy-meta{color:var(--text-dim); font-size:10px; font-weight:400; line-height:1.35;}
     .sticky-buy-label{display:inline-flex; flex:0 0 auto; align-items:center; justify-content:center; min-height:44px; box-sizing:border-box; padding:12px 16px; border-radius:2px; background:#c5e86c; color:#1b211d; font-size:15px; font-weight:700; white-space:nowrap;}
     .sticky-buy-label-desktop{display:none;}
     .sticky-buy-label-mobile{display:inline-flex;}
+    .sticky-buy-price-mobile{display:inline;}
+    .sticky-buy-price-desktop{display:none;}
+    .sticky-buy-meta-desktop{display:none;}
+    .sticky-buy-meta-mobile{display:inline;}
     .sticky-buy:hover{background:linear-gradient(180deg,rgba(255,255,255,.025),rgba(255,255,255,.005)),rgba(12,15,17,.9);}
+    .consent-banner{right:12px; bottom:max(12px,env(safe-area-inset-bottom,0px)); left:12px; flex-direction:column; align-items:stretch; gap:14px; padding:16px;}
+    .consent-actions{display:grid; grid-template-columns:1fr 1fr;}
+    .consent-action{padding:9px 8px;}
   }
 
   .btn-buy:focus-visible, .btn-ghost:focus-visible, .reveal-card:focus-visible{outline:3px solid #e0b84a; outline-offset:4px;}
@@ -207,22 +240,31 @@
 </head>
 <body>
 <div class="grain"></div>
+<aside class="consent-banner" id="marketing-consent" role="region" aria-labelledby="consent-title" hidden>
+  <div class="consent-copy">
+    <strong class="consent-title" id="consent-title">We use cookies to understand how you use our website and measure our advertising. Is that okay?</strong>
+  </div>
+  <div class="consent-actions">
+    <button class="consent-action" id="consent-reject" type="button">Reject</button>
+    <button class="consent-action consent-action-accept" id="consent-accept" type="button">Accept</button>
+  </div>
+</aside>
 <section class="purchase-ticker" aria-label="Purchase details">
-  <p class="visually-hidden"><span data-gumroad-field="price">$24</span>. Instant PDF download. 30-page digital book. VAT calculated at checkout. Read on your laptop, tablet, or phone. No shipping. No-questions-asked refund if it is not what you expected.</p>
+  <p class="visually-hidden"><span data-gumroad-field="price">$24</span>. Instant PDF download. 30-page digital book. VAT calculated at checkout. Read on your laptop, tablet, or phone. No shipping. 7-day money-back guarantee.</p>
   <div class="ticker-viewport" aria-hidden="true">
     <div class="ticker-track">
       <div class="ticker-group">
-        <span class="ticker-copy"><span data-gumroad-field="price">$24</span><span class="details-separator" aria-hidden="true">·</span>Instant PDF download<span class="details-separator" aria-hidden="true">·</span>30-page digital book<span class="details-separator" aria-hidden="true">·</span>VAT calculated at checkout<span class="details-separator" aria-hidden="true">·</span>Read on laptop, tablet, or phone<span class="details-separator" aria-hidden="true">·</span>No shipping<span class="details-separator" aria-hidden="true">·</span>No-questions-asked refund</span>
-        <span class="ticker-copy"><span data-gumroad-field="price">$24</span><span class="details-separator" aria-hidden="true">·</span>Instant PDF download<span class="details-separator" aria-hidden="true">·</span>30-page digital book<span class="details-separator" aria-hidden="true">·</span>VAT calculated at checkout<span class="details-separator" aria-hidden="true">·</span>Read on laptop, tablet, or phone<span class="details-separator" aria-hidden="true">·</span>No shipping<span class="details-separator" aria-hidden="true">·</span>No-questions-asked refund</span>
+        <span class="ticker-copy"><span data-gumroad-field="price">$24</span><span class="details-separator" aria-hidden="true">·</span>Instant PDF download<span class="details-separator" aria-hidden="true">·</span>30-page digital book<span class="details-separator" aria-hidden="true">·</span>VAT calculated at checkout<span class="details-separator" aria-hidden="true">·</span>Read on laptop, tablet, or phone<span class="details-separator" aria-hidden="true">·</span>No shipping<span class="details-separator" aria-hidden="true">·</span>7-day money-back guarantee</span>
+        <span class="ticker-copy"><span data-gumroad-field="price">$24</span><span class="details-separator" aria-hidden="true">·</span>Instant PDF download<span class="details-separator" aria-hidden="true">·</span>30-page digital book<span class="details-separator" aria-hidden="true">·</span>VAT calculated at checkout<span class="details-separator" aria-hidden="true">·</span>Read on laptop, tablet, or phone<span class="details-separator" aria-hidden="true">·</span>No shipping<span class="details-separator" aria-hidden="true">·</span>7-day money-back guarantee</span>
       </div>
       <div class="ticker-group">
-        <span class="ticker-copy"><span data-gumroad-field="price">$24</span><span class="details-separator" aria-hidden="true">·</span>Instant PDF download<span class="details-separator" aria-hidden="true">·</span>30-page digital book<span class="details-separator" aria-hidden="true">·</span>VAT calculated at checkout<span class="details-separator" aria-hidden="true">·</span>Read on laptop, tablet, or phone<span class="details-separator" aria-hidden="true">·</span>No shipping<span class="details-separator" aria-hidden="true">·</span>No-questions-asked refund</span>
-        <span class="ticker-copy"><span data-gumroad-field="price">$24</span><span class="details-separator" aria-hidden="true">·</span>Instant PDF download<span class="details-separator" aria-hidden="true">·</span>30-page digital book<span class="details-separator" aria-hidden="true">·</span>VAT calculated at checkout<span class="details-separator" aria-hidden="true">·</span>Read on laptop, tablet, or phone<span class="details-separator" aria-hidden="true">·</span>No shipping<span class="details-separator" aria-hidden="true">·</span>No-questions-asked refund</span>
+        <span class="ticker-copy"><span data-gumroad-field="price">$24</span><span class="details-separator" aria-hidden="true">·</span>Instant PDF download<span class="details-separator" aria-hidden="true">·</span>30-page digital book<span class="details-separator" aria-hidden="true">·</span>VAT calculated at checkout<span class="details-separator" aria-hidden="true">·</span>Read on laptop, tablet, or phone<span class="details-separator" aria-hidden="true">·</span>No shipping<span class="details-separator" aria-hidden="true">·</span>7-day money-back guarantee</span>
+        <span class="ticker-copy"><span data-gumroad-field="price">$24</span><span class="details-separator" aria-hidden="true">·</span>Instant PDF download<span class="details-separator" aria-hidden="true">·</span>30-page digital book<span class="details-separator" aria-hidden="true">·</span>VAT calculated at checkout<span class="details-separator" aria-hidden="true">·</span>Read on laptop, tablet, or phone<span class="details-separator" aria-hidden="true">·</span>No shipping<span class="details-separator" aria-hidden="true">·</span>7-day money-back guarantee</span>
       </div>
     </div>
   </div>
 </section>
-<a href="https://gumroad.com/checkout?product=bogqv&amp;quantity=1" class="btn-buy sticky-buy" aria-hidden="true" tabindex="-1"><span class="sticky-buy-details"><span class="sticky-buy-price"><span data-gumroad-field="price">$24</span>&nbsp;USD, yours forever</span><span class="sticky-buy-meta">+VAT at checkout <span aria-hidden="true">·</span> 24 hour refund</span></span><span class="sticky-buy-label sticky-buy-label-desktop">Buy for&nbsp;<span data-gumroad-field="price">$24</span>&nbsp;USD</span><span class="sticky-buy-label sticky-buy-label-mobile">Buy the book</span></a>
+<a href="https://gumroad.com/checkout?product=bogqv&amp;quantity=1" class="btn-buy sticky-buy" aria-hidden="true" tabindex="-1"><span class="sticky-buy-details"><span class="sticky-buy-price"><span class="sticky-buy-price-desktop"><span data-gumroad-field="price">$24</span>&nbsp;USD, yours forever</span><span class="sticky-buy-price-mobile"><span data-gumroad-field="price">$24</span>&nbsp;USD (+VAT)</span></span><span class="sticky-buy-meta"><span class="sticky-buy-meta-desktop">+VAT at checkout <span aria-hidden="true">·</span> 7-day money-back guarantee</span><span class="sticky-buy-meta-mobile">Instant PDF download <span aria-hidden="true">·</span> 7-day money-back guarantee</span></span></span><span class="sticky-buy-label sticky-buy-label-desktop">Buy for&nbsp;<span data-gumroad-field="price">$24</span>&nbsp;USD</span><span class="sticky-buy-label sticky-buy-label-mobile">Buy now</span></a>
 
 <!-- HERO -->
 <section class="hero-section">
@@ -353,7 +395,7 @@
       </div>
       <div class="reveal" style="transition-delay:.16s">
         <h3 class="font-bold mb-2">Guarantee</h3>
-        <p class="text-sm" style="color:var(--text-dim)">Not what you expected? Email me and I'll refund you, no questions asked. I believe it's that good.</p>
+        <p class="text-sm" style="color:var(--text-dim)">7-day money-back guarantee. If it's not what you expected, email me for a refund.</p>
       </div>
     </div>
   </div>
@@ -389,10 +431,95 @@
     <p class="text-xs mt-6 reveal" style="color:var(--text-dim); margin-top:32px; top:0;">
       Instant PDF download<span class="details-separator" aria-hidden="true">·</span>VAT calculated at checkout
     </p>
+    <button class="consent-settings-link" id="open-consent-settings" type="button">Cookie settings</button>
   </div>
 </section>
 
 <script>
+  // Only initialize Meta Pixel after the visitor explicitly opts into marketing.
+  (function(){
+    var pixelId = '1528955037412173';
+    var storageKey = 'intentionalImageMarketingConsent';
+    var banner = document.getElementById('marketing-consent');
+    var consent = null;
+    var initialized = false;
+    var trackedClicks = new WeakSet();
+
+    var readConsent = function(){
+      try {
+        return window.localStorage.getItem(storageKey);
+      } catch(error) {
+        console.warn('Unable to read marketing consent preference.', error);
+        return null;
+      }
+    };
+    var saveConsent = function(value){
+      try {
+        window.localStorage.setItem(storageKey, value);
+      } catch(error) {
+        console.warn('Unable to save marketing consent preference.', error);
+      }
+    };
+
+    var initializePixel = function(){
+      if(initialized) return;
+      initialized = true;
+
+      if(!window.fbq){
+        (function(f,b,e,v,n,t,s){
+          if(f.fbq) return;
+          n = f.fbq = function(){ n.callMethod ? n.callMethod.apply(n,arguments) : n.queue.push(arguments); };
+          if(!f._fbq) f._fbq = n;
+          n.push = n;
+          n.loaded = true;
+          n.version = '2.0';
+          n.queue = [];
+          t = b.createElement(e);
+          t.async = true;
+          t.src = v;
+          s = b.getElementsByTagName(e)[0];
+          s.parentNode.insertBefore(t,s);
+        })(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
+      }
+
+      var pixel = window.fbq;
+      var state = typeof pixel.getState === 'function' ? pixel.getState() : null;
+      var hasPixel = state && Array.isArray(state.pixels) && state.pixels.some(function(item){ return item.id === pixelId; });
+      if(!hasPixel) pixel('init',pixelId);
+      pixel('consent','grant');
+      pixel('track','PageView');
+    };
+
+    var setConsent = function(value){
+      consent = value;
+      saveConsent(value);
+      banner.hidden = true;
+      if(value === 'granted'){
+        if(initialized) window.fbq('consent','grant');
+        else initializePixel();
+      }
+      else if(window.fbq) window.fbq('consent','revoke');
+    };
+
+    consent = readConsent();
+    if(consent === 'granted') initializePixel();
+    else if(consent !== 'denied') banner.hidden = false;
+
+    document.getElementById('consent-accept').addEventListener('click',function(){ setConsent('granted'); });
+    document.getElementById('consent-reject').addEventListener('click',function(){ setConsent('denied'); });
+    document.getElementById('open-consent-settings').addEventListener('click',function(){ banner.hidden = false; });
+
+    document.addEventListener('click',function(event){
+      if(consent !== 'granted' || !window.fbq || trackedClicks.has(event)) return;
+      var link = event.target.closest && event.target.closest('a[href]');
+      if(!link) return;
+      var destination = new URL(link.href,window.location.href);
+      if(destination.hostname !== 'gumroad.com' && !destination.hostname.endsWith('.gumroad.com')) return;
+      trackedClicks.add(event);
+      window.fbq('trackCustom','GumroadCheckoutClick');
+    },true);
+  })();
+
   // scroll reveal
   (function(){
     var els = document.querySelectorAll('.reveal');
