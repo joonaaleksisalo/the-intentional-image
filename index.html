@@ -47,9 +47,6 @@
   .final-cta-content > p{position:relative; top:-10px;}
   .final-cta-title{font-size:clamp(3.5rem,15vw,11.25rem); line-height:.84;}
 
-  .reveal{opacity:0; transform:translateY(18px); transition:opacity .7s ease, transform .7s ease;}
-  .reveal.in{opacity:1; transform:translateY(0);}
-
   .btn-row{display:flex; flex-wrap:wrap; gap:14px;}
   .btn-buy, .btn-ghost{
     display:inline-flex; align-items:center; justify-content:center;
@@ -97,9 +94,9 @@
     min-height:40px; padding:9px 12px; border:1px solid var(--line); border-radius:2px;
     background:transparent; color:var(--text); font:inherit; font-size:12px; font-weight:600; cursor:pointer;
   }
-  .consent-action:hover{background:rgba(242,240,234,.06);}
-  .consent-action-accept{border-color:#c5e86c; background:#c5e86c; color:#1b211d;}
-  .consent-action-accept:hover{background:#b5d65e;}
+  .consent-action:hover{background:var(--bg-card);}
+  .consent-action-accept{border-color:var(--line); background:var(--bg-card); color:var(--text);}
+  .consent-action-accept:hover{background:#242c30;}
   .consent-settings-link{padding:0; border:0; background:none; color:var(--text-dim); font:inherit; font-size:11px; text-decoration:underline; text-underline-offset:3px; cursor:pointer;}
   .consent-settings-link:hover{color:var(--text);}
   @media(max-width:767px){
@@ -518,21 +515,6 @@
       trackedClicks.add(event);
       window.fbq('trackCustom','GumroadCheckoutClick');
     },true);
-  })();
-
-  // scroll reveal
-  (function(){
-    var els = document.querySelectorAll('.reveal');
-    if('IntersectionObserver' in window){
-      var io = new IntersectionObserver(function(entries){
-        entries.forEach(function(en){
-          if(en.isIntersecting){ en.target.classList.add('in'); io.unobserve(en.target); }
-        });
-      }, {threshold:.15});
-      els.forEach(function(el){ io.observe(el); });
-    } else {
-      els.forEach(function(el){ el.classList.add('in'); });
-    }
   })();
 
   // Keep checkout within reach after the hero purchase button scrolls away.
