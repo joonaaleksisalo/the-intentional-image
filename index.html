@@ -133,17 +133,72 @@
   .hero-section{
     min-height:86vh;
     min-height:86svh;
-    display:flex;
-    align-items:center;
     padding:2.5rem 0;
   }
+  .hero-layout{
+    min-height:calc(86svh - 5rem);
+    display:grid;
+    grid-template-columns:minmax(0,1.08fr) minmax(280px,.92fr);
+    align-items:center;
+    gap:clamp(1rem,2vw,2rem);
+  }
+  .hero-copy{position:relative; z-index:1;}
+
   .hero-title{
-    font-size:clamp(3.4rem, 13vw, 10.5rem);
-    line-height:.82;
-    letter-spacing:-.01em;
+    margin:0 0 1.75rem;
+    color:var(--text);
+    font-size:clamp(3.1rem, 7.5vw, 6.8rem);
+    font-weight:750;
+    line-height:.93;
+    letter-spacing:-.075em;
   }
   .hero-title span{display:block;}
-  .hero-title span:first-child{transform:translateX(calc(-.12em + .5px));}
+  .hero-title em{color:#c5e86c; font-family:var(--serif); font-weight:700; font-style:normal; letter-spacing:-.06em;}
+  .hero-description{
+    max-width:40ch;
+    margin:0 0 2rem;
+    color:var(--text-dim);
+    font-size:clamp(1rem,1.45vw,1.2rem);
+    line-height:1.6;
+  }
+  .hero-note{margin:2rem 0 0; color:var(--text-dim);}
+  .hero-portrait{
+    position:relative;
+    display:flex;
+    align-items:flex-end;
+    justify-content:center;
+    width:min(128%,620px);
+    aspect-ratio:928 / 1152;
+    height:auto;
+    margin:0 0 0 -14%;
+    isolation:isolate;
+  }
+  .hero-portrait img{
+    display:block;
+    width:100%;
+    height:100%;
+    object-fit:contain;
+    object-position:center bottom;
+    transform:translateY(-48px);
+    mask-image:url("assets/portrait-mask.svg");
+    mask-size:135% 112%;
+    mask-position:50% 100%;
+    mask-repeat:no-repeat;
+    -webkit-mask-image:url("assets/portrait-mask.svg");
+    -webkit-mask-size:135% 112%;
+    -webkit-mask-position:50% 100%;
+    -webkit-mask-repeat:no-repeat;
+  }
+  @media(max-width:767px){
+    .hero-section{min-height:0; padding:1.5rem 0 4rem;}
+    .hero-layout{min-height:0; grid-template-columns:minmax(0,1fr); gap:0;}
+    .hero-portrait{grid-row:1; width:min(100%,420px); margin:0 0 0 auto;}
+    .hero-portrait img{transform:none;}
+    .hero-copy{grid-row:2; margin-top:-1.25rem;}
+    .hero-title{margin-bottom:1.35rem; font-size:clamp(3rem,12.2vw,4.5rem);}
+    .hero-description{margin-bottom:1.5rem;}
+    .hero-note{margin-top:1.5rem;}
+  }
 
   .reveal-card{position:relative; overflow:hidden; border-radius:2px; aspect-ratio:4/5; cursor:pointer;}
   .reveal-card img{position:absolute; inset:0; width:100%; height:100%; object-fit:cover; transition:opacity .6s ease;}
@@ -269,23 +324,25 @@
 
 <!-- HERO -->
 <section class="hero-section">
-  <div class="wrap">
-    <div class="reveal">
-      <p class="text-xs tracking-[.2em] uppercase mb-8" style="color:var(--text-dim)">A complete visual framework</p>
-      <h1 class="serif font-bold hero-title" style="margin-bottom:3.75rem;">
-        <span>The</span><span>Intentional</span><span>Image</span>
+  <div class="wrap hero-layout">
+    <div class="hero-copy reveal">
+      <h1 class="hero-title">
+        <span>Think about</span><span>composition</span><span><em>like a Pro.</em></span>
       </h1>
-      <p data-gumroad-field="description" class="text-lg sm:text-xl leading-relaxed" style="color:var(--text-dim); max-width:52ch; margin-bottom:3.75rem;">
-        I made this book with one goal: teaching you to make better images in less than 1-hour. Let the transformation begin.
+      <p data-gumroad-field="description" class="hero-description">
+        Learn to make stronger images by thinking about composition like a professional artist.
       </p>
       <div class="btn-row">
         <a href="https://gumroad.com/checkout?product=bogqv&amp;quantity=1" class="btn-buy">Buy for&nbsp;<span data-gumroad-field="price">$24</span>&nbsp;USD</a>
         <a href="#inside" class="btn-ghost">What's inside</a>
       </div>
-      <p class="text-xs mt-6" style="color:var(--text-dim); margin-top:64px;">
+      <p class="text-xs hero-note">
         Instant PDF download<span class="details-separator" aria-hidden="true">·</span>VAT calculated at checkout
       </p>
     </div>
+    <figure class="hero-portrait reveal">
+      <img src="assets/joona-portrait.png" alt="Joona Salo, professional artist and author of The Intentional Image" fetchpriority="high" decoding="async">
+    </figure>
   </div>
 </section>
 
