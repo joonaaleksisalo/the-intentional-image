@@ -226,7 +226,6 @@
   .testimonial-carousel{cursor:grab; touch-action:pan-y;}
   .testimonial-carousel.is-dragging{cursor:grabbing; user-select:none;}
   .testimonial-carousel.is-dragging *{user-select:none;}
-  @media(prefers-reduced-motion:reduce){.testimonial-track{will-change:auto;}}
   section.testimonial-section{padding-bottom:3.35rem;}
   section.final-cta-section{padding-top:4rem;}
   @media(min-width:768px){
@@ -640,7 +639,6 @@
     var pointerId = null;
     var lastPointerX = 0;
     var lastPointerTime = 0;
-    var reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     var render = function(){
       if(setWidth > 0){
         offset = ((offset % setWidth) + setWidth) % setWidth;
@@ -684,7 +682,7 @@
       if(lastFrame){
         var elapsed = Math.min(now - lastFrame, 50) / 1000;
         if(pointerId === null){
-          offset += (reducedMotion ? 0 : 20) * elapsed + velocity * elapsed;
+          offset += 20 * elapsed + velocity * elapsed;
           velocity *= Math.exp(-elapsed / .8);
           if(Math.abs(velocity) < .5) velocity = 0;
           render();
