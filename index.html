@@ -226,13 +226,12 @@
   .testimonial-carousel::before,.testimonial-carousel::after{position:absolute; top:0; bottom:0; z-index:1; width:clamp(24px,7vw,112px); content:""; pointer-events:none;}
   .testimonial-carousel::before{left:0; background:linear-gradient(90deg,var(--bg),transparent);}
   .testimonial-carousel::after{right:0; background:linear-gradient(270deg,var(--bg),transparent);}
-  .testimonial-track{display:flex; width:max-content; will-change:transform;}
+  .testimonial-track{display:flex; width:max-content; will-change:transform; animation:testimonial-scroll 44s linear infinite;}
+  @keyframes testimonial-scroll{to{transform:translateX(-50%);}}
   .testimonial-set{display:flex; flex:none; align-items:stretch; gap:1rem; padding-right:1rem;}
   .testimonial-slide{box-sizing:border-box; flex:0 0 min(590px, calc(100vw - 3rem)); max-width:none; margin:0; white-space:normal; overflow-wrap:anywhere;}
   .testimonial-slide[data-testimonial="dor"]{flex-basis:min(670px, calc(100vw - 3rem));}
-  .testimonial-carousel{cursor:grab; touch-action:pan-y;}
-  .testimonial-carousel.is-dragging{cursor:grabbing; user-select:none;}
-  .testimonial-carousel.is-dragging *{user-select:none;}
+  .testimonial-carousel{touch-action:pan-y;}
   section.testimonial-section{padding-bottom:3.35rem;}
   section.final-cta-section{padding-top:4rem;}
   @media(min-width:768px){
@@ -652,83 +651,6 @@
     duplicate.setAttribute('aria-hidden','true');
     track.appendChild(duplicate);
 
-    var offset = 0;
-    var velocity = 0;
-    var lastFrame = 0;
-    var pointerId = null;
-    var lastPointerX = 0;
-    var lastPointerTime = 0;
-    var render = function(){
-      var firstSet = track.firstElementChild;
-      while(firstSet){
-        var firstWidth = firstSet.getBoundingClientRect().width;
-        if(firstWidth <= 0 || offset < firstWidth) break;
-        track.appendChild(firstSet);
-        offset -= firstWidth;
-        firstSet = track.firstElementChild;
-      }
-      while(offset < 0){
-        var lastSet = track.lastElementChild;
-        if(!lastSet) break;
-        var lastWidth = lastSet.getBoundingClientRect().width;
-        if(lastWidth <= 0) break;
-        track.insertBefore(lastSet, track.firstElementChild);
-        offset += lastWidth;
-      }
-      track.style.transform = 'translate3d(' + -offset + 'px,0,0)';
-    };
-    if('ResizeObserver' in window){
-      var resizeObserver = new ResizeObserver(render);
-      resizeObserver.observe(set);
-      resizeObserver.observe(duplicate);
-      resizeObserver.observe(carousel);
-    }
-    window.requestAnimationFrame(render);
-
-    carousel.addEventListener('pointerdown', function(event){
-      if(event.button !== 0 && event.pointerType === 'mouse') return;
-      pointerId = event.pointerId;
-      lastPointerX = event.clientX;
-      lastPointerTime = performance.now();
-      velocity = 0;
-      carousel.classList.add('is-dragging');
-      carousel.setPointerCapture(pointerId);
-    });
-    carousel.addEventListener('pointermove', function(event){
-      if(event.pointerId !== pointerId) return;
-      var now = performance.now();
-      var elapsed = Math.max(now - lastPointerTime, 1);
-      var movement = event.clientX - lastPointerX;
-      offset -= movement;
-      velocity = -.65 * (movement / elapsed * 1000) + .35 * velocity;
-      lastPointerX = event.clientX;
-      lastPointerTime = now;
-      render();
-    });
-    var endDrag = function(event){
-      if(event.pointerId !== pointerId) return;
-      pointerId = null;
-      carousel.classList.remove('is-dragging');
-    };
-    carousel.addEventListener('pointerup', endDrag);
-    carousel.addEventListener('pointercancel', endDrag);
-    carousel.addEventListener('lostpointercapture', endDrag);
-    window.addEventListener('resize', render);
-    window.addEventListener('orientationchange', render);
-    var animate = function(now){
-      if(lastFrame){
-        var elapsed = Math.min(now - lastFrame, 50) / 1000;
-        if(pointerId === null){
-          offset += (window.matchMedia('(max-width: 767px)').matches ? 36 : 20) * elapsed + velocity * elapsed;
-          velocity *= Math.exp(-elapsed / .8);
-          if(Math.abs(velocity) < .5) velocity = 0;
-          render();
-        }
-      }
-      lastFrame = now;
-      window.requestAnimationFrame(animate);
-    };
-    window.requestAnimationFrame(animate);
   })();
 
   // scroll reveal
