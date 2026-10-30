@@ -660,7 +660,7 @@
     var lastPointerX = 0;
     var lastPointerTime = 0;
     var measureSet = function(){
-      var measuredWidth = duplicate.getBoundingClientRect().left - set.getBoundingClientRect().left;
+      var measuredWidth = duplicate.offsetLeft - set.offsetLeft;
       if(measuredWidth > 0 && measuredWidth !== loopWidth){
         loopWidth = measuredWidth;
         render();
