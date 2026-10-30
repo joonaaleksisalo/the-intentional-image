@@ -202,6 +202,9 @@
     .hero-note{margin-top:1.5rem;}
     section.book-preview-section{padding:1rem 0 0;}
     section.make-better-section{padding-top:2.5rem;}
+    .testimonial-set{gap:.75rem; padding-right:.75rem;}
+    .testimonial-slide,
+    .testimonial-slide[data-testimonial="dor"]{flex-basis:min(590px,calc(100vw - 5rem));}
   }
 
   .reveal-card{position:relative; overflow:hidden; border-radius:2px; aspect-ratio:4/5; cursor:pointer;}
@@ -712,7 +715,7 @@
       if(lastFrame){
         var elapsed = Math.min(now - lastFrame, 50) / 1000;
         if(pointerId === null){
-          offset += 20 * elapsed + velocity * elapsed;
+          offset += (window.matchMedia('(max-width: 767px)').matches ? 36 : 20) * elapsed + velocity * elapsed;
           velocity *= Math.exp(-elapsed / .8);
           if(Math.abs(velocity) < .5) velocity = 0;
           render();
