@@ -202,9 +202,8 @@
     .hero-note{margin-top:1.5rem;}
     section.book-preview-section{padding:1rem 0 0;}
     section.make-better-section{padding-top:2.5rem;}
-    .testimonial-set{gap:.75rem; padding-right:.75rem;}
-    .testimonial-slide,
-    .testimonial-slide[data-testimonial="dor"]{flex-basis:min(590px,calc(100vw - 5rem));}
+    .testimonial-carousel .testimonial-set{gap:.75rem; padding-right:.75rem;}
+    .testimonial-carousel .testimonial-slide{flex-basis:min(590px,calc(100vw - 5rem));}
   }
 
   .reveal-card{position:relative; overflow:hidden; border-radius:2px; aspect-ratio:4/5; cursor:pointer;}
@@ -228,10 +227,10 @@
   .testimonial-carousel::after{right:0; background:linear-gradient(270deg,var(--bg),transparent);}
   .testimonial-track{display:flex; width:max-content; will-change:transform;}
   .testimonial-track.is-ready{animation:testimonial-scroll 44s linear infinite;}
-  @keyframes testimonial-scroll{to{transform:translateX(-50%);}}
+  @keyframes testimonial-scroll{to{transform:translateX(var(--testimonial-loop-offset));}}
   .testimonial-set{display:flex; flex:none; align-items:stretch; gap:1rem; padding-right:1rem;}
   .testimonial-slide{box-sizing:border-box; flex:0 0 min(590px, calc(100vw - 3rem)); max-width:none; margin:0; white-space:normal; overflow-wrap:anywhere;}
-  .testimonial-slide[data-testimonial="dor"]{flex-basis:min(670px, calc(100vw - 3rem));}
+  @media(min-width:768px){.testimonial-slide[data-testimonial="dor"]{flex-basis:min(670px, calc(100vw - 3rem));}}
   .testimonial-carousel{touch-action:pan-y;}
   section.testimonial-section{padding-bottom:3.35rem;}
   section.final-cta-section{padding-top:4rem;}
@@ -651,7 +650,24 @@
     var duplicate = set.cloneNode(true);
     duplicate.setAttribute('aria-hidden','true');
     track.appendChild(duplicate);
-    track.classList.add('is-ready');
+    var updateLoopWidth = function(){
+      var firstSetLeft = set.getBoundingClientRect().left;
+      var nextSetLeft = duplicate.getBoundingClientRect().left;
+      var loopWidth = nextSetLeft - firstSetLeft;
+      if(loopWidth > 0){
+        track.style.setProperty('--testimonial-loop-offset', -loopWidth + 'px');
+        track.classList.add('is-ready');
+      }
+    };
+    updateLoopWidth();
+    if('ResizeObserver' in window){
+      var resizeObserver = new ResizeObserver(updateLoopWidth);
+      resizeObserver.observe(set);
+      resizeObserver.observe(duplicate);
+      resizeObserver.observe(carousel);
+    }
+    window.addEventListener('resize', updateLoopWidth);
+    window.addEventListener('orientationchange', updateLoopWidth);
 
   })();
 
