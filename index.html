@@ -654,32 +654,36 @@
 
     var offset = 0;
     var velocity = 0;
-    var loopWidth = 0;
     var lastFrame = 0;
     var pointerId = null;
     var lastPointerX = 0;
     var lastPointerTime = 0;
-    var measureSet = function(){
-      var measuredWidth = duplicate.offsetLeft - set.offsetLeft;
-      if(measuredWidth > 0 && measuredWidth !== loopWidth){
-        loopWidth = measuredWidth;
-        render();
-      }
-    };
     var render = function(){
-      if(loopWidth > 0){
-        offset = ((offset % loopWidth) + loopWidth) % loopWidth;
-        track.style.transform = 'translate3d(' + -offset + 'px,0,0)';
+      var firstSet = track.firstElementChild;
+      while(firstSet){
+        var firstWidth = firstSet.getBoundingClientRect().width;
+        if(firstWidth <= 0 || offset < firstWidth) break;
+        track.appendChild(firstSet);
+        offset -= firstWidth;
+        firstSet = track.firstElementChild;
       }
+      while(offset < 0){
+        var lastSet = track.lastElementChild;
+        if(!lastSet) break;
+        var lastWidth = lastSet.getBoundingClientRect().width;
+        if(lastWidth <= 0) break;
+        track.insertBefore(lastSet, track.firstElementChild);
+        offset += lastWidth;
+      }
+      track.style.transform = 'translate3d(' + -offset + 'px,0,0)';
     };
     if('ResizeObserver' in window){
-      var resizeObserver = new ResizeObserver(measureSet);
+      var resizeObserver = new ResizeObserver(render);
       resizeObserver.observe(set);
       resizeObserver.observe(duplicate);
       resizeObserver.observe(carousel);
     }
-    window.requestAnimationFrame(measureSet);
-    window.addEventListener('load', measureSet, {once:true});
+    window.requestAnimationFrame(render);
 
     carousel.addEventListener('pointerdown', function(event){
       if(event.button !== 0 && event.pointerType === 'mouse') return;
@@ -709,8 +713,8 @@
     carousel.addEventListener('pointerup', endDrag);
     carousel.addEventListener('pointercancel', endDrag);
     carousel.addEventListener('lostpointercapture', endDrag);
-    window.addEventListener('resize', measureSet);
-    window.addEventListener('orientationchange', measureSet);
+    window.addEventListener('resize', render);
+    window.addEventListener('orientationchange', render);
     var animate = function(now){
       if(lastFrame){
         var elapsed = Math.min(now - lastFrame, 50) / 1000;
