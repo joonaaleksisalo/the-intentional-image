@@ -226,8 +226,8 @@
   .testimonial-carousel::before{left:0; background:linear-gradient(90deg,var(--bg),transparent);}
   .testimonial-carousel::after{right:0; background:linear-gradient(270deg,var(--bg),transparent);}
   .testimonial-track{display:flex; width:max-content; will-change:transform;}
-  .testimonial-track.is-ready{animation:testimonial-scroll 44s linear infinite;}
-  @keyframes testimonial-scroll{to{transform:translateX(var(--testimonial-loop-offset));}}
+  .testimonial-track.is-ready{animation:ticker-scroll 44s linear infinite;}
+  @media(max-width:767px){.testimonial-track.is-ready{animation-duration:72s;}}
   .testimonial-set{display:flex; flex:none; align-items:stretch; gap:1rem; padding-right:1rem;}
   .testimonial-slide{box-sizing:border-box; flex:0 0 min(590px, calc(100vw - 3rem)); max-width:none; margin:0; white-space:normal; overflow-wrap:anywhere;}
   @media(min-width:768px){.testimonial-slide[data-testimonial="dor"]{flex-basis:min(670px, calc(100vw - 3rem));}}
@@ -650,24 +650,7 @@
     var duplicate = set.cloneNode(true);
     duplicate.setAttribute('aria-hidden','true');
     track.appendChild(duplicate);
-    var updateLoopWidth = function(){
-      var firstSetLeft = set.getBoundingClientRect().left;
-      var nextSetLeft = duplicate.getBoundingClientRect().left;
-      var loopWidth = nextSetLeft - firstSetLeft;
-      if(loopWidth > 0){
-        track.style.setProperty('--testimonial-loop-offset', -loopWidth + 'px');
-        track.classList.add('is-ready');
-      }
-    };
-    updateLoopWidth();
-    if('ResizeObserver' in window){
-      var resizeObserver = new ResizeObserver(updateLoopWidth);
-      resizeObserver.observe(set);
-      resizeObserver.observe(duplicate);
-      resizeObserver.observe(carousel);
-    }
-    window.addEventListener('resize', updateLoopWidth);
-    window.addEventListener('orientationchange', updateLoopWidth);
+    track.classList.add('is-ready');
 
   })();
 
