@@ -190,11 +190,13 @@
     -webkit-mask-repeat:no-repeat;
   }
   @media(max-width:767px){
-    .hero-section{min-height:0; padding:1.5rem 0 4rem;}
+    .hero-section{min-height:0; padding:calc(1.5rem - 20px) 0 4rem;}
     .hero-layout{min-height:0; grid-template-columns:minmax(0,1fr); gap:0;}
-    .hero-portrait{grid-row:1; width:min(75%,315px); margin:0 0 0 auto;}
+    .hero-portrait{box-sizing:border-box; grid-row:1; width:min(75%,315px); margin:0 auto; padding-bottom:20px;}
     .hero-portrait img{transform:none;}
     .hero-copy{grid-row:2; margin-top:-1.25rem;}
+    .hero-copy .btn-row{box-sizing:border-box; flex-wrap:nowrap; gap:10px; width:calc(100% + 12px); max-width:480px; margin-left:-6px;}
+    .hero-copy .btn-row > a{box-sizing:border-box; flex:1 1 0; min-width:0; padding:14px 10px; font-size:clamp(12px,3.8vw,15px); white-space:nowrap;}
     .hero-title{margin-bottom:1.35rem; font-size:clamp(3rem,12.2vw,4.5rem);}
     .hero-description{margin-bottom:1.5rem;}
     .hero-note{margin-top:1.5rem;}
