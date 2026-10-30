@@ -45,7 +45,7 @@
   .final-cta-content{display:flex; flex-direction:column; align-items:center; gap:32px;}
   .final-cta-content > .reveal{margin:0;}
   .final-cta-content > p{position:relative; top:-10px;}
-  .final-cta-title{font-size:clamp(3.5rem,15vw,11.25rem); line-height:.84;}
+  .final-cta-title{font-size:clamp(3.5rem,15vw,11.25rem); line-height:.84; letter-spacing:-.02em;}
 
   .reveal{opacity:0; transform:translateY(18px); transition:opacity .7s ease, transform .7s ease;}
   .reveal.in{opacity:1; transform:translateY(0);}
@@ -192,7 +192,7 @@
   @media(max-width:767px){
     .hero-section{min-height:0; padding:1.5rem 0 4rem;}
     .hero-layout{min-height:0; grid-template-columns:minmax(0,1fr); gap:0;}
-    .hero-portrait{grid-row:1; width:min(100%,420px); margin:0 0 0 auto;}
+    .hero-portrait{grid-row:1; width:min(75%,315px); margin:0 0 0 auto;}
     .hero-portrait img{transform:none;}
     .hero-copy{grid-row:2; margin-top:-1.25rem;}
     .hero-title{margin-bottom:1.35rem; font-size:clamp(3rem,12.2vw,4.5rem);}
@@ -647,17 +647,28 @@
 
     var offset = 0;
     var velocity = 0;
-    var setWidth = set.getBoundingClientRect().width;
+    var setWidth = 0;
     var lastFrame = 0;
     var pointerId = null;
     var lastPointerX = 0;
     var lastPointerTime = 0;
+    var measureSet = function(){
+      var measuredWidth = set.getBoundingClientRect().width;
+      if(measuredWidth > 0 && measuredWidth !== setWidth){
+        setWidth = measuredWidth;
+        render();
+      }
+    };
     var render = function(){
       if(setWidth > 0){
         offset = ((offset % setWidth) + setWidth) % setWidth;
         track.style.transform = 'translate3d(' + -offset + 'px,0,0)';
       }
     };
+    if('ResizeObserver' in window){
+      new ResizeObserver(measureSet).observe(set);
+    }
+    window.requestAnimationFrame(measureSet);
 
     carousel.addEventListener('pointerdown', function(event){
       if(event.button !== 0 && event.pointerType === 'mouse') return;
@@ -687,10 +698,7 @@
     carousel.addEventListener('pointerup', endDrag);
     carousel.addEventListener('pointercancel', endDrag);
     carousel.addEventListener('lostpointercapture', endDrag);
-    window.addEventListener('resize', function(){
-      setWidth = set.getBoundingClientRect().width;
-      render();
-    });
+    window.addEventListener('resize', measureSet);
     var animate = function(now){
       if(lastFrame){
         var elapsed = Math.min(now - lastFrame, 50) / 1000;
