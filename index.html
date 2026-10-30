@@ -226,7 +226,8 @@
   .testimonial-carousel::before,.testimonial-carousel::after{position:absolute; top:0; bottom:0; z-index:1; width:clamp(24px,7vw,112px); content:""; pointer-events:none;}
   .testimonial-carousel::before{left:0; background:linear-gradient(90deg,var(--bg),transparent);}
   .testimonial-carousel::after{right:0; background:linear-gradient(270deg,var(--bg),transparent);}
-  .testimonial-track{display:flex; width:max-content; will-change:transform; animation:testimonial-scroll 44s linear infinite;}
+  .testimonial-track{display:flex; width:max-content; will-change:transform;}
+  .testimonial-track.is-ready{animation:testimonial-scroll 44s linear infinite;}
   @keyframes testimonial-scroll{to{transform:translateX(-50%);}}
   .testimonial-set{display:flex; flex:none; align-items:stretch; gap:1rem; padding-right:1rem;}
   .testimonial-slide{box-sizing:border-box; flex:0 0 min(590px, calc(100vw - 3rem)); max-width:none; margin:0; white-space:normal; overflow-wrap:anywhere;}
@@ -650,6 +651,7 @@
     var duplicate = set.cloneNode(true);
     duplicate.setAttribute('aria-hidden','true');
     track.appendChild(duplicate);
+    track.classList.add('is-ready');
 
   })();
 
