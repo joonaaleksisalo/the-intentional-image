@@ -231,8 +231,11 @@
   @media(min-width:768px){.testimonial-slide[data-testimonial="dor"]{flex-basis:min(670px, calc(100vw - 3rem));}}
   .testimonial-section{padding:clamp(3.5rem,7vw,6rem) 0; border-top:1px solid var(--line); overflow:hidden;}
   .testimonial-marquee{overflow:hidden; width:100%; outline-offset:-4px;}
-  .testimonial-track{display:flex; width:max-content; will-change:transform;}
+  .testimonial-track{display:flex; width:max-content; animation:testimonial-scroll var(--testimonial-loop-duration,40s) linear infinite; will-change:transform;}
   .testimonial-group{display:flex; flex:0 0 auto; align-items:stretch; gap:20px; padding-right:20px;}
+  @keyframes testimonial-scroll{to{transform:translate3d(var(--testimonial-loop-distance,0px),0,0);}}
+  @media(hover:hover) and (pointer:fine){.testimonial-marquee:hover .testimonial-track,.testimonial-marquee:focus .testimonial-track{animation-play-state:paused;}}
+  @media(prefers-reduced-motion:reduce){.testimonial-track{animation:none;}}
   @media(max-width:767px){.testimonial-slide[data-testimonial="dor"]{flex-basis:min(590px,calc(100vw - 3rem));}}
   section.final-cta-section{padding-top:4rem;}
   @media(min-width:768px){
@@ -671,15 +674,14 @@
     var marquee = track.parentNode;
 
     var base = groups[0];
-    var unit = 0, offset = 0, last = null;
-    var hoverPaused = false, focusPaused = false;
 
     // Make sure enough identical groups exist to cover the screen with no gap.
     var measure = function(){
       var w = base.getBoundingClientRect().width;
       if(!w) return;
-      unit = w;
-      var needed = Math.ceil(marquee.clientWidth / unit) + 1;
+      track.style.setProperty('--testimonial-loop-distance', -w + 'px');
+      track.style.setProperty('--testimonial-loop-duration', w / 44 + 's');
+      var needed = Math.ceil(marquee.clientWidth / w) + 1;
       var have = track.querySelectorAll('[data-testimonial-group]').length;
       for(; have < needed; have++){
         var copy = base.cloneNode(true);
@@ -688,33 +690,7 @@
       }
     };
     measure();
-    if('ResizeObserver' in window){
-      new ResizeObserver(measure).observe(base);
-      new ResizeObserver(measure).observe(marquee);
-    }else{
-      window.addEventListener('resize', measure);
-    }
-
-    var fine = window.matchMedia('(hover:hover) and (pointer:fine)');
-    marquee.addEventListener('mouseenter', function(){ hoverPaused = fine.matches; });
-    marquee.addEventListener('mouseleave', function(){ hoverPaused = false; });
-    marquee.addEventListener('focus', function(){
-      try{ focusPaused = marquee.matches(':focus-visible'); }catch(e){ focusPaused = false; }
-    });
-    marquee.addEventListener('blur', function(){ focusPaused = false; });
-
-    var frame = function(now){
-      if(last !== null && unit && !hoverPaused && !focusPaused){
-        var mobile = window.matchMedia('(max-width: 767px)').matches;
-        var speed = mobile ? 16 : 22; // px per second
-        offset += Math.min(now - last, 100) / 1000 * speed;
-        if(offset >= unit) offset -= unit * Math.floor(offset / unit);
-      }
-      last = now;
-      track.style.transform = 'translate3d(' + (-offset) + 'px,0,0)';
-      window.requestAnimationFrame(frame);
-    };
-    window.requestAnimationFrame(frame);
+    window.addEventListener('resize', measure);
   })();
 
   // scroll reveal
