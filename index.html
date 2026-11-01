@@ -235,8 +235,8 @@
   .testimonial-marquee::before{left:0; background:linear-gradient(to right,rgba(20,24,27,1) 0%,rgba(20,24,27,0) 100%);}
   .testimonial-marquee::after{right:0; background:linear-gradient(to left,rgba(20,24,27,1) 0%,rgba(20,24,27,0) 100%);}
   .testimonial-track{position:relative; z-index:0; display:flex; width:max-content; animation:testimonial-scroll var(--testimonial-loop-duration,44s) linear infinite; will-change:transform;}
-  .testimonial-group{display:flex; flex:0 0 auto; align-items:stretch; gap:20px; padding-right:20px;}
-  @keyframes testimonial-scroll{to{transform:translate3d(var(--testimonial-loop-distance,-1910px),0,0);}}
+  .testimonial-run{display:flex; flex:0 0 auto; align-items:stretch; gap:20px; padding-right:20px;}
+  @keyframes testimonial-scroll{to{transform:translate3d(-50%,0,0);}}
   @media(min-width:768px) and (hover:hover) and (pointer:fine){.testimonial-marquee:hover .testimonial-track,.testimonial-marquee:focus-visible .testimonial-track{animation-play-state:paused;}}
   @media(max-width:767px){
     .testimonial-marquee{width:100vw; max-width:none; margin-left:calc(50% - 50vw);}
@@ -514,8 +514,8 @@
 <section class="testimonial-section" aria-label="Reader testimonials">
   <div class="testimonial-marquee" tabindex="0">
     <div class="testimonial-track" id="testimonial-track">
-      <div class="testimonial-group" data-testimonial-group></div>
-      <div class="testimonial-group" data-testimonial-group aria-hidden="true"></div>
+      <div class="testimonial-run" data-testimonial-run></div>
+      <div class="testimonial-run" data-testimonial-run aria-hidden="true"></div>
     </div>
   </div>
 </section>
@@ -666,36 +666,32 @@
       content.appendChild(slide);
     });
     var cards = content.querySelectorAll('[data-testimonial-slide]');
-    var groups = document.querySelectorAll('[data-testimonial-group]');
-    if(groups.length !== 2) return;
-    groups.forEach(function(group){
-      cards.forEach(function(card){ group.appendChild(card.cloneNode(true)); });
+    var track = document.getElementById('testimonial-track');
+    var runs = track.querySelectorAll('[data-testimonial-run]');
+    if(runs.length !== 2) return;
+    var firstRun = runs[0];
+    var repeatedSequences = 17;
+
+    runs.forEach(function(run,runIndex){
+      for(var repeat = 0; repeat < repeatedSequences; repeat++){
+        cards.forEach(function(card){
+          var copy = card.cloneNode(true);
+          if(runIndex > 0 || repeat > 0) copy.setAttribute('aria-hidden','true');
+          run.appendChild(copy);
+        });
+      }
     });
 
-    var track = document.getElementById('testimonial-track');
-    var marquee = track.parentNode;
-    var base = groups[0];
-
     var measure = function(){
-      var w = base.getBoundingClientRect().width;
+      var w = firstRun.getBoundingClientRect().width;
       if(!w) return;
-      var needed = Math.max(2,Math.ceil(marquee.clientWidth / w) + 2);
-      var have = track.querySelectorAll('[data-testimonial-group]').length;
-      for(; have > needed; have--) track.lastElementChild.remove();
-      for(; have < needed; have++){
-        var copy = base.cloneNode(true);
-        copy.setAttribute('aria-hidden','true');
-        track.appendChild(copy);
-      }
       var speed = window.matchMedia('(max-width:767px)').matches ? 90 : 44;
-      track.style.setProperty('--testimonial-loop-distance',-w + 'px');
       track.style.setProperty('--testimonial-loop-duration',w / speed + 's');
     };
     measure();
     if('ResizeObserver' in window){
       var resizeObserver = new ResizeObserver(measure);
-      resizeObserver.observe(base);
-      resizeObserver.observe(marquee);
+      resizeObserver.observe(firstRun);
     }else{
       window.addEventListener('resize', measure);
     }
