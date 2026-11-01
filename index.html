@@ -81,6 +81,13 @@
   .sticky-buy-details{display:none;}
   .sticky-buy-label-mobile{display:none;}
   .sticky-buy-meta-mobile{display:none;}
+  .consent-backdrop{
+    position:fixed; right:0; bottom:0; left:0; z-index:19;
+    height:calc(var(--consent-banner-height, 0px) + max(12px,env(safe-area-inset-bottom,0px)));
+    background:linear-gradient(to top,rgba(20,24,27,.5),rgba(20,24,27,0));
+    -webkit-backdrop-filter:blur(8px); backdrop-filter:blur(8px); pointer-events:none;
+  }
+  .consent-backdrop[hidden]{display:none;}
   .consent-banner{
     position:fixed; right:24px; bottom:24px; left:auto; z-index:20;
     display:flex; align-items:center; justify-content:space-between; gap:24px;
@@ -91,7 +98,7 @@
   }
   .consent-banner[hidden]{display:none;}
   .consent-copy{min-width:0;}
-  .consent-title{display:block; margin-bottom:4px; color:var(--text-dim); font-size:13px; font-weight:400; line-height:1.5;}
+  .consent-title{display:block; color:var(--text-dim); font-size:13px; font-weight:400; line-height:1.5;}
   .consent-actions{display:flex; flex:0 0 auto; gap:8px;}
   .consent-action{
     min-height:40px; padding:9px 12px; border:1px solid var(--line); border-radius:2px;
@@ -124,10 +131,11 @@
     .sticky-buy-meta-desktop{display:none;}
     .sticky-buy-meta-mobile{display:inline;}
     .sticky-buy:hover{background:linear-gradient(180deg,rgba(255,255,255,.025),rgba(255,255,255,.005)),rgba(12,15,17,.9);}
-    .consent-banner{right:12px; bottom:max(12px,env(safe-area-inset-bottom,0px)); left:12px; width:auto; flex-direction:column; align-items:stretch; gap:14px; padding:16px;}
+    .consent-banner{right:12px; bottom:max(12px,env(safe-area-inset-bottom,0px)); left:12px; width:auto; flex-direction:column; align-items:stretch; gap:14px; padding:20px 16px; background:rgba(20,24,27,.75); -webkit-backdrop-filter:blur(8px); backdrop-filter:blur(8px);}
     .consent-actions{display:grid; grid-template-columns:1fr 1fr;}
     .consent-action{padding:9px 8px;}
   }
+  @media(min-width:768px){.consent-backdrop{display:none;}}
 
   .btn-buy:focus-visible, .btn-ghost:focus-visible, .reveal-card:focus-visible{outline:3px solid #e0b84a; outline-offset:4px;}
   .hero-section{
@@ -223,17 +231,9 @@
   @media(min-width:768px){.testimonial-slide[data-testimonial="dor"]{flex-basis:min(670px, calc(100vw - 3rem));}}
   .testimonial-section{padding:clamp(3.5rem,7vw,6rem) 0; border-top:1px solid var(--line); overflow:hidden;}
   .testimonial-marquee{overflow:hidden; width:100%; outline-offset:-4px;}
-  .testimonial-track{display:flex; width:max-content; animation:testimonial-scroll var(--testimonial-duration,80s) linear infinite; will-change:transform;}
+  .testimonial-track{display:flex; width:max-content; will-change:transform;}
   .testimonial-group{display:flex; flex:0 0 auto; align-items:stretch; gap:20px; padding-right:20px;}
-  .testimonial-marquee:hover .testimonial-track,
-  .testimonial-marquee:focus .testimonial-track{animation-play-state:paused;}
-  @keyframes testimonial-scroll{to{transform:translateX(-50%);}}
   @media(max-width:767px){.testimonial-slide[data-testimonial="dor"]{flex-basis:min(590px,calc(100vw - 3rem));}}
-  @media(prefers-reduced-motion:reduce){
-    .testimonial-marquee{overflow-x:auto; overscroll-behavior-x:contain;}
-    .testimonial-track{animation:none; transform:none;}
-    .testimonial-group[aria-hidden="true"]{display:none;}
-  }
   section.final-cta-section{padding-top:4rem;}
   @media(min-width:768px){
     section.final-cta-section{padding-top:5.35rem;}
@@ -318,6 +318,7 @@
 </head>
 <body>
 <div class="grain"></div>
+<div class="consent-backdrop" id="consent-backdrop" aria-hidden="true" hidden></div>
 <aside class="consent-banner" id="marketing-consent" role="region" aria-labelledby="consent-title" hidden>
   <div class="consent-copy">
     <strong class="consent-title" id="consent-title">We use cookies to understand how you use our website and measure our advertising.</strong>
@@ -535,9 +536,21 @@
     var pixelId = '1528955037412173';
     var storageKey = 'intentionalImageMarketingConsent';
     var banner = document.getElementById('marketing-consent');
+    var backdrop = document.getElementById('consent-backdrop');
     var consent = null;
     var initialized = false;
     var trackedClicks = new WeakSet();
+
+    var syncConsentVisibility = function(visible){
+      banner.hidden = !visible;
+      backdrop.hidden = !visible;
+      if(visible) backdrop.style.setProperty('--consent-banner-height',banner.offsetHeight + 'px');
+    };
+    if(window.ResizeObserver){
+      new ResizeObserver(function(){
+        if(!banner.hidden) backdrop.style.setProperty('--consent-banner-height',banner.offsetHeight + 'px');
+      }).observe(banner);
+    }
 
     var readConsent = function(){
       try {
@@ -587,7 +600,7 @@
     var setConsent = function(value){
       consent = value;
       saveConsent(value);
-      banner.hidden = true;
+      syncConsentVisibility(false);
       if(value === 'granted'){
         if(initialized) window.fbq('consent','grant');
         else initializePixel();
@@ -597,11 +610,11 @@
 
     consent = readConsent();
     if(consent === 'granted') initializePixel();
-    else if(consent !== 'denied') banner.hidden = false;
+    else if(consent !== 'denied') syncConsentVisibility(true);
 
     document.getElementById('consent-accept').addEventListener('click',function(){ setConsent('granted'); });
     document.getElementById('consent-reject').addEventListener('click',function(){ setConsent('denied'); });
-    document.getElementById('open-consent-settings').addEventListener('click',function(){ banner.hidden = false; });
+    document.getElementById('open-consent-settings').addEventListener('click',function(){ syncConsentVisibility(true); });
 
     document.addEventListener('click',function(event){
       if(consent !== 'granted' || !window.fbq || trackedClicks.has(event)) return;
@@ -655,18 +668,53 @@
     });
 
     var track = document.getElementById('testimonial-track');
-    var setDuration = function(){
-      var mobile = window.matchMedia('(max-width: 767px)').matches;
-      var speed = mobile ? 16 : 22;
-      var distance = groups[0].getBoundingClientRect().width;
-      if(distance > 0) track.style.setProperty('--testimonial-duration', (distance / speed) + 's');
+    var marquee = track.parentNode;
+
+    var base = groups[0];
+    var unit = 0, offset = 0, last = null;
+    var hoverPaused = false, focusPaused = false;
+
+    // Make sure enough identical groups exist to cover the screen with no gap.
+    var measure = function(){
+      var w = base.getBoundingClientRect().width;
+      if(!w) return;
+      unit = w;
+      var needed = Math.ceil(marquee.clientWidth / unit) + 1;
+      var have = track.querySelectorAll('[data-testimonial-group]').length;
+      for(; have < needed; have++){
+        var copy = base.cloneNode(true);
+        copy.setAttribute('aria-hidden','true');
+        track.appendChild(copy);
+      }
     };
-    setDuration();
+    measure();
     if('ResizeObserver' in window){
-      new ResizeObserver(setDuration).observe(groups[0]);
+      new ResizeObserver(measure).observe(base);
+      new ResizeObserver(measure).observe(marquee);
     }else{
-      window.addEventListener('resize', setDuration);
+      window.addEventListener('resize', measure);
     }
+
+    var fine = window.matchMedia('(hover:hover) and (pointer:fine)');
+    marquee.addEventListener('mouseenter', function(){ hoverPaused = fine.matches; });
+    marquee.addEventListener('mouseleave', function(){ hoverPaused = false; });
+    marquee.addEventListener('focus', function(){
+      try{ focusPaused = marquee.matches(':focus-visible'); }catch(e){ focusPaused = false; }
+    });
+    marquee.addEventListener('blur', function(){ focusPaused = false; });
+
+    var frame = function(now){
+      if(last !== null && unit && !hoverPaused && !focusPaused){
+        var mobile = window.matchMedia('(max-width: 767px)').matches;
+        var speed = mobile ? 16 : 22; // px per second
+        offset += Math.min(now - last, 100) / 1000 * speed;
+        if(offset >= unit) offset -= unit * Math.floor(offset / unit);
+      }
+      last = now;
+      track.style.transform = 'translate3d(' + (-offset) + 'px,0,0)';
+      window.requestAnimationFrame(frame);
+    };
+    window.requestAnimationFrame(frame);
   })();
 
   // scroll reveal
