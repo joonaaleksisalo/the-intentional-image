@@ -632,7 +632,7 @@
     },true);
   })();
 
-  // Build two identical groups so the ticker can loop at a fixed pixel speed.
+  // Repeat the full testimonial sequence enough times to cover the viewport.
   (function(){
     var template = document.getElementById('testimonial-data');
     if(!template) return;
@@ -673,18 +673,29 @@
     });
 
     var track = document.getElementById('testimonial-track');
+    var marquee = track.parentNode;
     var base = groups[0];
 
     var measure = function(){
       var w = base.getBoundingClientRect().width;
       if(!w) return;
+      var needed = Math.max(2,Math.ceil(marquee.clientWidth / w) + 2);
+      var have = track.querySelectorAll('[data-testimonial-group]').length;
+      for(; have > needed; have--) track.lastElementChild.remove();
+      for(; have < needed; have++){
+        var copy = base.cloneNode(true);
+        copy.setAttribute('aria-hidden','true');
+        track.appendChild(copy);
+      }
       var speed = window.matchMedia('(max-width:767px)').matches ? 90 : 44;
       track.style.setProperty('--testimonial-loop-distance',-w + 'px');
       track.style.setProperty('--testimonial-loop-duration',w / speed + 's');
     };
     measure();
     if('ResizeObserver' in window){
-      new ResizeObserver(measure).observe(base);
+      var resizeObserver = new ResizeObserver(measure);
+      resizeObserver.observe(base);
+      resizeObserver.observe(marquee);
     }else{
       window.addEventListener('resize', measure);
     }
