@@ -229,13 +229,21 @@
   }
   .testimonial-slide{box-sizing:border-box; flex:0 0 min(590px, calc(100vw - 3rem)); max-width:none; margin:0; white-space:normal; overflow-wrap:anywhere;}
   @media(min-width:768px){.testimonial-slide[data-testimonial="dor"]{flex-basis:min(670px, calc(100vw - 3rem));}}
-  .testimonial-section{padding:clamp(3.5rem,7vw,6rem) 0; border-top:1px solid var(--line); overflow:hidden;}
-  .testimonial-marquee{overflow:hidden; width:100%; outline-offset:-4px;}
+  .testimonial-section{padding:clamp(3.5rem,7vw,6rem) 0; border-top:1px solid var(--line);}
+  .testimonial-marquee{
+    overflow:hidden; width:100%; max-width:1100px; margin:0 auto; outline-offset:-4px;
+    -webkit-mask-image:linear-gradient(to right,transparent,#000 100px,#000 calc(100% - 100px),transparent);
+    mask-image:linear-gradient(to right,transparent,#000 100px,#000 calc(100% - 100px),transparent);
+  }
   .testimonial-track{display:flex; width:max-content; animation:testimonial-scroll var(--testimonial-loop-duration,44s) linear infinite; will-change:transform;}
   .testimonial-group{display:flex; flex:0 0 auto; align-items:stretch; gap:20px; padding-right:20px;}
-  @keyframes testimonial-scroll{to{transform:translate3d(-50%,0,0);}}
+  @keyframes testimonial-scroll{to{transform:translate3d(var(--testimonial-loop-distance,-1910px),0,0);}}
   @media(min-width:768px) and (hover:hover) and (pointer:fine){.testimonial-marquee:hover .testimonial-track,.testimonial-marquee:focus-visible .testimonial-track{animation-play-state:paused;}}
-  @media(max-width:767px){.testimonial-slide[data-testimonial="dor"]{flex-basis:min(590px,calc(100vw - 3rem));}}
+  @media(max-width:767px){
+    .testimonial-marquee{width:100vw; max-width:none; margin-left:calc(50% - 50vw);}
+    .testimonial-marquee{-webkit-mask-image:linear-gradient(to right,transparent,#000 28px,#000 calc(100% - 28px),transparent); mask-image:linear-gradient(to right,transparent,#000 28px,#000 calc(100% - 28px),transparent);}
+    .testimonial-slide[data-testimonial="dor"]{flex-basis:min(590px,calc(100vw - 3rem));}
+  }
   section.final-cta-section{padding-top:4rem;}
   @media(min-width:768px){
     section.final-cta-section{padding-top:5.35rem;}
@@ -670,31 +678,18 @@
     });
 
     var track = document.getElementById('testimonial-track');
-    var marquee = track.parentNode;
-
     var base = groups[0];
 
-    // Make sure enough identical groups exist to cover the screen with no gap.
     var measure = function(){
       var w = base.getBoundingClientRect().width;
       if(!w) return;
-      var needed = Math.max(2,2 * Math.ceil(marquee.clientWidth / w));
-      var have = track.querySelectorAll('[data-testimonial-group]').length;
-      for(; have > needed; have--){
-        track.lastElementChild.remove();
-      }
-      for(; have < needed; have++){
-        var copy = base.cloneNode(true);
-        copy.setAttribute('aria-hidden','true');
-        track.appendChild(copy);
-      }
       var speed = window.matchMedia('(max-width:767px)').matches ? 90 : 44;
-      track.style.setProperty('--testimonial-loop-duration',w * needed / 2 / speed + 's');
+      track.style.setProperty('--testimonial-loop-distance',-w + 'px');
+      track.style.setProperty('--testimonial-loop-duration',w / speed + 's');
     };
     measure();
     if('ResizeObserver' in window){
       new ResizeObserver(measure).observe(base);
-      new ResizeObserver(measure).observe(marquee);
     }else{
       window.addEventListener('resize', measure);
     }
