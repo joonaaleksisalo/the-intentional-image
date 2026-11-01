@@ -236,7 +236,7 @@
   .testimonial-marquee::after{right:0; background:linear-gradient(to left,rgba(20,24,27,1) 0%,rgba(20,24,27,0) 100%);}
   .testimonial-track{position:relative; z-index:0; display:flex; width:max-content; animation:testimonial-scroll var(--testimonial-loop-duration,44s) linear infinite; will-change:transform;}
   .testimonial-run{display:flex; flex:0 0 auto; align-items:stretch; gap:20px; padding-right:20px;}
-  @keyframes testimonial-scroll{to{transform:translate3d(var(--testimonial-loop-distance,-1910px),0,0);}}
+  @keyframes testimonial-scroll{to{transform:translate3d(-33.3333333333%,0,0);}}
   @media(min-width:768px) and (hover:hover) and (pointer:fine){.testimonial-marquee:hover .testimonial-track,.testimonial-marquee:focus-visible .testimonial-track{animation-play-state:paused;}}
   @media(max-width:767px){
     .testimonial-marquee{width:100vw; max-width:none; margin-left:calc(50% - 50vw);}
@@ -524,7 +524,7 @@
 <!-- FINAL CTA -->
 <section class="py-24 md:py-32 final-cta-section">
   <div class="wrap text-center final-cta-content">
-    <p class="text-xs tracking-[.2em] uppercase mb-6 reveal" style="color:var(--text-dim)">Transform your art with The Intentional Image</p>
+    <p class="text-xs tracking-[.2em] uppercase mb-6 reveal" style="color:var(--text-dim)">The Intentional Image</p>
     <h2 class="font-bebas-neue final-cta-title reveal" style="transition-delay:.05s">CREATE WITH INTENT.</h2>
     <div class="reveal" style="transition-delay:.1s">
       <a href="https://gumroad.com/checkout?product=bogqv&amp;quantity=1" class="btn-buy">Buy for&nbsp;<span data-gumroad-field="price">$24</span>&nbsp;USD</a>
@@ -683,15 +683,14 @@
       var w = firstRun.getBoundingClientRect().width;
       if(!w) return;
       var speed = window.matchMedia('(max-width:767px)').matches ? 24 : 44;
-      track.style.setProperty('--testimonial-loop-distance',-w + 'px');
       track.style.setProperty('--testimonial-loop-duration',w / speed + 's');
     };
     measure();
+    window.addEventListener('resize',measure);
+    window.addEventListener('orientationchange',measure);
     if('ResizeObserver' in window){
       var resizeObserver = new ResizeObserver(measure);
       resizeObserver.observe(firstRun);
-    }else{
-      window.addEventListener('resize', measure);
     }
   })();
 
