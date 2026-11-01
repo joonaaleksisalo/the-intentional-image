@@ -231,11 +231,10 @@
   @media(min-width:768px){.testimonial-slide[data-testimonial="dor"]{flex-basis:min(670px, calc(100vw - 3rem));}}
   .testimonial-section{padding:clamp(3.5rem,7vw,6rem) 0; border-top:1px solid var(--line); overflow:hidden;}
   .testimonial-marquee{overflow:hidden; width:100%; outline-offset:-4px;}
-  .testimonial-track{display:flex; width:max-content; animation:testimonial-scroll var(--testimonial-loop-duration,40s) linear infinite; will-change:transform;}
+  .testimonial-track{display:flex; width:max-content; animation:testimonial-scroll 44s linear infinite; will-change:transform;}
   .testimonial-group{display:flex; flex:0 0 auto; align-items:stretch; gap:20px; padding-right:20px;}
-  @keyframes testimonial-scroll{to{transform:translate3d(var(--testimonial-loop-distance,0px),0,0);}}
+  @keyframes testimonial-scroll{to{transform:translate3d(-50%,0,0);}}
   @media(hover:hover) and (pointer:fine){.testimonial-marquee:hover .testimonial-track,.testimonial-marquee:focus .testimonial-track{animation-play-state:paused;}}
-  @media(prefers-reduced-motion:reduce){.testimonial-track{animation:none;}}
   @media(max-width:767px){.testimonial-slide[data-testimonial="dor"]{flex-basis:min(590px,calc(100vw - 3rem));}}
   section.final-cta-section{padding-top:4rem;}
   @media(min-width:768px){
@@ -679,9 +678,8 @@
     var measure = function(){
       var w = base.getBoundingClientRect().width;
       if(!w) return;
-      track.style.setProperty('--testimonial-loop-distance', -w + 'px');
-      track.style.setProperty('--testimonial-loop-duration', w / 44 + 's');
-      var needed = Math.ceil(marquee.clientWidth / w) + 1;
+      var needed = Math.max(2,Math.ceil(marquee.clientWidth / w) + 1);
+      if(needed % 2) needed++;
       var have = track.querySelectorAll('[data-testimonial-group]').length;
       for(; have < needed; have++){
         var copy = base.cloneNode(true);
