@@ -276,6 +276,7 @@
   .solo-reel-heading{margin:0 24px 8px; color:#f2f0ea; font-size:1.125rem; font-weight:600; line-height:1.4;}
   .solo-reel-caption{margin:0 24px 24px; color:#9aa0a3; font-size:.875rem; line-height:1.5;}
   .solo-reel-window{position:relative; isolation:isolate; display:block; width:100%; max-width:1100px; margin:0 auto; overflow:hidden;}
+  .solo-reel-window:focus-visible{outline:2px solid #e0b84a; outline-offset:3px;}
   .solo-reel-window::before,.solo-reel-window::after{position:absolute; top:0; bottom:0; z-index:1; width:180px; content:""; pointer-events:none;}
   .solo-reel-window::before{left:0; background:linear-gradient(to right,rgba(20,24,27,1) 0%,rgba(20,24,27,0) 100%);}
   .solo-reel-window::after{right:0; background:linear-gradient(to left,rgba(20,24,27,1) 0%,rgba(20,24,27,0) 100%);}
@@ -561,8 +562,8 @@
 
 <div class="solo-reel-root" id="solo-reel-root" role="region" aria-labelledby="solo-reel-heading">
   <h2 class="solo-reel-heading" id="solo-reel-heading">Standalone marquee test</h2>
-  <p class="solo-reel-caption">Independent full-width rebuild, outside the original testimonial layout. Compare this row with the original below.</p>
-  <div class="solo-reel-window" data-solo-reel-window>
+  <p class="solo-reel-caption">Independent full-width rebuild, outside the original testimonial layout. Compare this row with the original below. Hold the cards to slow the movement; release to return to its steady pace.</p>
+  <div class="solo-reel-window" data-solo-reel-window tabindex="0" aria-label="Testimonial carousel. Hold Space or Enter to slow.">
     <div class="solo-reel-belt" data-solo-reel-belt>
       <div class="solo-reel-set" data-solo-reel-set aria-label="Group A">
         <article class="solo-reel-card">
@@ -617,6 +618,11 @@
     var animation = null;
     var resizeFrame = 0;
     var speed = 32;
+    var slowPointerId = null;
+    var slowKeyHeld = false;
+    var updatePlaybackSpeed = function(){
+      if(animation) animation.playbackRate = slowPointerId !== null || slowKeyHeld ? .5 : 1;
+    };
     var format = function(value){ return value.toFixed(1); };
     var cardPositions = function(group){
       return Array.prototype.map.call(group.querySelectorAll('.solo-reel-card'),function(card){
@@ -648,15 +654,17 @@
     };
     var measureAndAnimate = function(){
       resizeFrame = 0;
+      var currentOffset = animation ? belt.getBoundingClientRect().left - windowElement.getBoundingClientRect().left : 0;
       var distance = firstGroup.getBoundingClientRect().width;
       if(!windowElement.getBoundingClientRect().width || !distance){
         throw new Error('Standalone marquee cannot measure a zero-width viewport or group.');
       }
       if(animation) animation.cancel();
       animation = belt.animate(
-        [{transform:'translateX(0px)'},{transform:'translateX(-' + distance + 'px)'}],
+        [{transform:'translateX(' + currentOffset + 'px)'},{transform:'translateX(' + (currentOffset - distance) + 'px)'}],
         {duration:distance / speed * 1000,iterations:Infinity,easing:'linear'}
       );
+      updatePlaybackSpeed();
       updateReport(distance);
     };
     var scheduleMeasure = function(){
@@ -667,6 +675,34 @@
     scheduleMeasure();
     window.addEventListener('resize',scheduleMeasure,{passive:true});
     window.addEventListener('orientationchange',scheduleMeasure);
+    windowElement.addEventListener('pointerdown',function(event){
+      if(!event.isPrimary || event.button !== 0 || slowPointerId !== null) return;
+      slowPointerId = event.pointerId;
+      updatePlaybackSpeed();
+    });
+    var resumeNormalSpeed = function(event){
+      if(slowPointerId === null || (event && typeof event.pointerId === 'number' && event.pointerId !== slowPointerId)) return;
+      slowPointerId = null;
+      updatePlaybackSpeed();
+    };
+    windowElement.addEventListener('keydown',function(event){
+      if((event.code !== 'Space' && event.code !== 'Enter') || event.repeat) return;
+      event.preventDefault();
+      slowKeyHeld = true;
+      updatePlaybackSpeed();
+    });
+    windowElement.addEventListener('keyup',function(event){
+      if(event.code !== 'Space' && event.code !== 'Enter') return;
+      slowKeyHeld = false;
+      updatePlaybackSpeed();
+    });
+    window.addEventListener('pointerup',resumeNormalSpeed);
+    window.addEventListener('pointercancel',resumeNormalSpeed);
+    window.addEventListener('blur',function(){
+      slowPointerId = null;
+      slowKeyHeld = false;
+      updatePlaybackSpeed();
+    });
     window.setInterval(function(){
       updateReport(firstGroup.getBoundingClientRect().width);
     },1000);
