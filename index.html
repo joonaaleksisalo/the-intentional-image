@@ -227,21 +227,29 @@
     background:var(--bg-card); border:1px solid var(--line); border-radius:12px;
     padding:clamp(1.5rem,4vw,2.5rem); max-width:640px; margin:0 auto;
   }
-  .testimonial-slide{box-sizing:border-box; flex:0 0 min(590px, calc(100vw - 3rem)); max-width:none; margin:0; white-space:normal; overflow-wrap:anywhere;}
-  @media(min-width:768px){.testimonial-slide[data-testimonial="dor"]{flex-basis:min(670px, calc(100vw - 3rem));}}
+  .testimonial-slide{box-sizing:border-box; flex:0 0 590px; max-width:none; margin:0; white-space:normal; overflow-wrap:anywhere;}
   .testimonial-section{padding:clamp(3.5rem,7vw,6rem) 0; border-top:1px solid var(--line);}
   .testimonial-marquee{position:relative; isolation:isolate; overflow:hidden; width:100%; max-width:1100px; margin:0 auto; outline-offset:-4px;}
   .testimonial-marquee::before,.testimonial-marquee::after{position:absolute; top:0; bottom:0; z-index:1; width:180px; content:""; pointer-events:none;}
   .testimonial-marquee::before{left:0; background:linear-gradient(to right,rgba(20,24,27,1) 0%,rgba(20,24,27,0) 100%);}
   .testimonial-marquee::after{right:0; background:linear-gradient(to left,rgba(20,24,27,1) 0%,rgba(20,24,27,0) 100%);}
-  .testimonial-track{position:relative; z-index:0; display:flex; width:max-content; animation:testimonial-scroll var(--testimonial-loop-duration,44s) linear infinite; will-change:transform;}
-  .testimonial-run{display:flex; flex:0 0 auto; align-items:stretch; gap:20px; padding-right:20px;}
-  @keyframes testimonial-scroll{to{transform:translate3d(-33.3333333333%,0,0);}}
+  .testimonial-track{position:relative; z-index:0; display:flex; width:max-content; animation:testimonial-scroll var(--testimonial-loop-duration,1s) linear infinite; will-change:transform;}
+  .testimonial-track.is-restarting{animation:none;}
+  .testimonial-group{display:flex; flex:0 0 auto; align-items:stretch; width:max-content;}
+  .testimonial-sequence{display:flex; flex:0 0 auto; align-items:stretch; gap:20px; width:max-content; padding-right:20px;}
+  .testimonial-marquee.is-paused .testimonial-track{animation-play-state:paused;}
+  @keyframes testimonial-scroll{to{transform:translate3d(var(--testimonial-distance,0px),0,0);}}
+  @media(prefers-reduced-motion:reduce){.testimonial-marquee:not(.is-playing) .testimonial-track{animation-play-state:paused;}}
+  .testimonial-marquee.is-playing .testimonial-track{animation-play-state:running;}
   @media(min-width:768px) and (hover:hover) and (pointer:fine){.testimonial-marquee:hover .testimonial-track,.testimonial-marquee:focus-visible .testimonial-track{animation-play-state:paused;}}
+  .testimonial-controls{max-width:1100px; margin:1rem auto 0; padding:0 24px; text-align:right;}
+  .testimonial-toggle{padding:.45rem .8rem; border:1px solid var(--line); border-radius:999px; background:transparent; color:var(--text-dim); font:inherit; font-size:.875rem; cursor:pointer;}
+  .testimonial-toggle:focus-visible{outline:2px solid var(--text); outline-offset:3px;}
   @media(max-width:767px){
     .testimonial-marquee{width:100vw; max-width:none; margin-left:calc(50% - 50vw);}
     .testimonial-marquee::before,.testimonial-marquee::after{width:64px;}
-    .testimonial-slide[data-testimonial="dor"]{flex-basis:min(590px,calc(100vw - 3rem));}
+    .testimonial-slide{flex-basis:min(590px,calc(100vw - 3rem));}
+    .testimonial-controls{padding:0 24px;}
   }
   section.final-cta-section{padding-top:4rem;}
   @media(min-width:768px){
@@ -512,12 +520,14 @@
 </template>
 
 <section class="testimonial-section" aria-label="Reader testimonials">
-  <div class="testimonial-marquee" tabindex="0">
+  <div class="testimonial-marquee is-paused" tabindex="0">
     <div class="testimonial-track" id="testimonial-track">
-      <div class="testimonial-run" data-testimonial-run></div>
-      <div class="testimonial-run" data-testimonial-run aria-hidden="true"></div>
-      <div class="testimonial-run" data-testimonial-run aria-hidden="true"></div>
+      <div class="testimonial-group" data-testimonial-group></div>
+      <div class="testimonial-group" data-testimonial-group aria-hidden="true"></div>
     </div>
+  </div>
+  <div class="testimonial-controls">
+    <button class="testimonial-toggle" type="button" data-testimonial-toggle aria-pressed="false">Pause testimonials</button>
   </div>
 </section>
 
@@ -633,10 +643,15 @@
     },true);
   })();
 
-  // Repeat the full testimonial sequence enough times to cover the viewport.
+  // Build two equal groups and animate exactly one measured group per loop.
   (function(){
     var template = document.getElementById('testimonial-data');
-    if(!template) return;
+    var marquee = document.querySelector('.testimonial-marquee');
+    var track = document.getElementById('testimonial-track');
+    var groups = track ? track.querySelectorAll('[data-testimonial-group]') : [];
+    var pauseButton = document.querySelector('[data-testimonial-toggle]');
+    if(!template || !marquee || !track || groups.length !== 2 || !pauseButton) return;
+
     var content = template.content;
     var original = content.querySelector('[data-testimonial-slide]');
     if(!original) return;
@@ -654,6 +669,7 @@
         quote:'It’s beautiful, easy to read, and easy to follow. I already approached composition in a similar way, but never to this level of detail. You’re teaching a skill. It’s like teaching someone to fish.'
       }
     ];
+    var cards = [original];
     testimonials.forEach(function(testimonial){
       var slide = original.cloneNode(true);
       var avatar = slide.querySelector('.t-avatar');
@@ -664,33 +680,98 @@
       details.querySelector('.font-bold').textContent = testimonial.name;
       details.querySelector('.text-sm').textContent = testimonial.role;
       slide.querySelector('.leading-relaxed').textContent = testimonial.quote;
-      content.appendChild(slide);
-    });
-    var cards = content.querySelectorAll('[data-testimonial-slide]');
-    var track = document.getElementById('testimonial-track');
-    var runs = track.querySelectorAll('[data-testimonial-run]');
-    if(runs.length !== 3) return;
-    var firstRun = runs[0];
-    runs.forEach(function(run,runIndex){
-      cards.forEach(function(card){
-        var copy = card.cloneNode(true);
-        if(runIndex > 0) copy.setAttribute('aria-hidden','true');
-        run.appendChild(copy);
-      });
+      cards.push(slide);
     });
 
-    var measure = function(){
-      var w = firstRun.getBoundingClientRect().width;
-      if(!w) return;
-      var speed = window.matchMedia('(max-width:767px)').matches ? 24 : 44;
-      track.style.setProperty('--testimonial-loop-duration',w / speed + 's');
+    var createSequence = function(groupIndex,sequenceIndex){
+      var sequence = document.createElement('div');
+      sequence.className = 'testimonial-sequence';
+      sequence.setAttribute('data-testimonial-sequence','');
+      if(groupIndex > 0 || sequenceIndex > 0) sequence.setAttribute('aria-hidden','true');
+      cards.forEach(function(card){
+        sequence.appendChild(card.cloneNode(true));
+      });
+      return sequence;
     };
+    var setSequenceCount = function(group,count,groupIndex){
+      while(group.children.length > count) group.removeChild(group.lastElementChild);
+      while(group.children.length < count) group.appendChild(createSequence(groupIndex,group.children.length));
+    };
+
+    var sequenceWidth = 0;
+    var lastViewportWidth = 0;
+    var lastDistance = 0;
+    var animationFrame = 0;
+    var paused = false;
+    var reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    var speed = 32;
+
+    groups.forEach(function(group,index){ setSequenceCount(group,1,index); });
+
+    var setPaused = function(value){
+      paused = value;
+      marquee.classList.toggle('is-paused',paused);
+      marquee.classList.toggle('is-playing',!paused);
+      pauseButton.textContent = paused ? 'Resume testimonials' : 'Pause testimonials';
+      pauseButton.setAttribute('aria-pressed',String(paused));
+    };
+
+    var measure = function(){
+      animationFrame = 0;
+      var viewportWidth = marquee.getBoundingClientRect().width;
+      var firstSequence = groups[0].firstElementChild;
+      var firstSequenceWidth = firstSequence ? firstSequence.getBoundingClientRect().width : 0;
+      if(!viewportWidth || !firstSequenceWidth) return;
+
+      var count = Math.max(1,Math.ceil(viewportWidth / firstSequenceWidth));
+      groups.forEach(function(group,index){ setSequenceCount(group,count,index); });
+      var distance = groups[0].getBoundingClientRect().width;
+      while(distance < viewportWidth){
+        count += 1;
+        groups.forEach(function(group,index){ setSequenceCount(group,count,index); });
+        distance = groups[0].getBoundingClientRect().width;
+      }
+
+      if(Math.abs(viewportWidth - lastViewportWidth) < .1 &&
+         Math.abs(firstSequenceWidth - sequenceWidth) < .1 &&
+         Math.abs(distance - lastDistance) < .1) return;
+
+      sequenceWidth = firstSequenceWidth;
+      lastViewportWidth = viewportWidth;
+      lastDistance = distance;
+      track.classList.add('is-restarting');
+      track.style.setProperty('--testimonial-distance',-distance + 'px');
+      track.style.setProperty('--testimonial-loop-duration',distance / speed + 's');
+      track.offsetWidth;
+      track.classList.remove('is-restarting');
+    };
+
+    var scheduleMeasure = function(){
+      if(animationFrame) return;
+      animationFrame = window.requestAnimationFrame(measure);
+    };
+
+    setPaused(reducedMotion.matches);
     measure();
-    window.addEventListener('resize',measure);
-    window.addEventListener('orientationchange',measure);
+    window.addEventListener('resize',scheduleMeasure,{passive:true});
+    window.addEventListener('orientationchange',scheduleMeasure);
+    if(window.visualViewport) window.visualViewport.addEventListener('resize',scheduleMeasure,{passive:true});
+    pauseButton.addEventListener('click',function(){ setPaused(!paused); });
+    if(reducedMotion.addEventListener){
+      reducedMotion.addEventListener('change',function(event){ if(event.matches) setPaused(true); });
+    } else if(reducedMotion.addListener){
+      reducedMotion.addListener(function(event){ if(event.matches) setPaused(true); });
+    }
+
+    if(document.fonts){
+      document.fonts.ready.then(scheduleMeasure);
+      if(document.fonts.addEventListener) document.fonts.addEventListener('loadingdone',scheduleMeasure);
+    }
+
     if('ResizeObserver' in window){
-      var resizeObserver = new ResizeObserver(measure);
-      resizeObserver.observe(firstRun);
+      var resizeObserver = new ResizeObserver(scheduleMeasure);
+      resizeObserver.observe(marquee);
+      resizeObserver.observe(groups[0].querySelector('.testimonial-slide'));
     }
   })();
 
