@@ -268,6 +268,39 @@
   }
   .t-stars{color:#e0b84a; letter-spacing:.1em; margin-left:auto;}
 
+  .solo-reel-root{
+    display:block; width:100%; max-width:none; margin:0; padding:3rem 0;
+    overflow:hidden; border-top:1px solid #2b3238; border-bottom:1px solid #2b3238;
+    background:#14181b; color:#f2f0ea; font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  }
+  .solo-reel-heading{margin:0 24px 8px; color:#f2f0ea; font-size:1.125rem; font-weight:600; line-height:1.4;}
+  .solo-reel-caption{margin:0 24px 24px; color:#9aa0a3; font-size:.875rem; line-height:1.5;}
+  .solo-reel-window{display:block; width:100%; overflow:hidden;}
+  .solo-reel-belt{display:flex; width:max-content; align-items:stretch; transform:translateX(0);}
+  .solo-reel-set{display:flex; flex:0 0 auto; align-items:stretch; gap:20px; width:max-content; padding-right:20px;}
+  .solo-reel-card{
+    display:block; box-sizing:border-box; flex:0 0 280px; width:280px; max-width:none; margin:0;
+    padding:24px; border:1px solid #2b3238; border-radius:12px; background:#1e2529;
+    white-space:normal; overflow-wrap:anywhere;
+  }
+  .solo-reel-byline{display:flex; align-items:center; gap:16px; margin:0 0 20px;}
+  .solo-reel-avatar{
+    display:block; flex:0 0 48px; width:48px; height:48px; border-radius:50%;
+    object-fit:cover; clip-path:circle(43% at center);
+  }
+  .solo-reel-identity{min-width:0;}
+  .solo-reel-name{margin:0; color:#f2f0ea; font-size:1rem; font-weight:700; line-height:1.5;}
+  .solo-reel-role{margin:2px 0 0; color:#9aa0a3; font-size:.875rem; line-height:1.25rem;}
+  .solo-reel-stars{margin-left:auto; color:#e0b84a; letter-spacing:.1em; white-space:nowrap;}
+  .solo-reel-quote{margin:0; color:#9aa0a3; font-size:1rem; line-height:1.625;}
+  .solo-reel-diagnostics{margin:24px 24px 0; color:#9aa0a3; font:12px/1.6 ui-monospace,SFMono-Regular,Consolas,monospace;}
+  .solo-reel-diagnostics-title{margin:0 0 6px; color:#f2f0ea; font:600 12px/1.5 Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;}
+  .solo-reel-report{display:block; max-width:100%; margin:0; white-space:pre-wrap; overflow-wrap:anywhere;}
+  @media(min-width:768px){
+    .solo-reel-card{flex-basis:590px; width:590px; padding:40px;}
+    .solo-reel-quote{font-size:1.125rem;}
+  }
+
   .chapter{border-top:1px solid var(--line); padding:26px 0;}
   .chapter:last-child{border-bottom:1px solid var(--line);}
   .num{font-family:var(--serif); color:var(--text-dim); font-size:14px;}
@@ -518,6 +551,120 @@
       </p>
     </div>
 </template>
+
+<div class="solo-reel-root" id="solo-reel-root" role="region" aria-labelledby="solo-reel-heading">
+  <h2 class="solo-reel-heading" id="solo-reel-heading">Standalone marquee test</h2>
+  <p class="solo-reel-caption">Independent full-width rebuild, outside the original testimonial layout. Compare this row with the original below.</p>
+  <div class="solo-reel-window" data-solo-reel-window>
+    <div class="solo-reel-belt" data-solo-reel-belt>
+      <div class="solo-reel-set" data-solo-reel-set aria-label="Group A">
+        <article class="solo-reel-card">
+          <div class="solo-reel-byline">
+            <img class="solo-reel-avatar" src="assets/hannu-testimonial.jpg" width="48" height="48" alt="Photo of Hannu">
+            <div class="solo-reel-identity"><p class="solo-reel-name">Hannu</p><p class="solo-reel-role">3D artist</p></div>
+            <span class="solo-reel-stars" aria-label="5 out of 5 stars">★★★★★</span>
+          </div>
+          <p class="solo-reel-quote">After reading it, I found myself looking at composition from a unique perspective. The e-book is concise, clear, and full of useful examples. The ending especially stuck with me.</p>
+        </article>
+        <article class="solo-reel-card">
+          <div class="solo-reel-byline">
+            <img class="solo-reel-avatar" src="assets/adi.png" width="48" height="48" alt="Photo of Adi">
+            <div class="solo-reel-identity"><p class="solo-reel-name">Adi</p><p class="solo-reel-role">3D artist</p></div>
+            <span class="solo-reel-stars" aria-label="5 out of 5 stars">★★★★★</span>
+          </div>
+          <p class="solo-reel-quote">I love how you explain the relationships between shapes, patterns, proportions, and visual balance. It helps you understand why something is visually appealing.</p>
+        </article>
+        <article class="solo-reel-card">
+          <div class="solo-reel-byline">
+            <img class="solo-reel-avatar" src="assets/dor.png" width="48" height="48" alt="Photo of Dor">
+            <div class="solo-reel-identity"><p class="solo-reel-name">Dor</p><p class="solo-reel-role">Web designer</p></div>
+            <span class="solo-reel-stars" aria-label="5 out of 5 stars">★★★★★</span>
+          </div>
+          <p class="solo-reel-quote">It’s beautiful, easy to read, and easy to follow. I already approached composition in a similar way, but never to this level of detail. You’re teaching a skill. It’s like teaching someone to fish.</p>
+        </article>
+      </div>
+    </div>
+  </div>
+  <div class="solo-reel-diagnostics">
+    <p class="solo-reel-diagnostics-title">Live layout measurements (CSS pixels; x positions are viewport-relative)</p>
+    <pre class="solo-reel-report" data-solo-reel-report>Measuring both groups and the card-to-card boundary…</pre>
+  </div>
+</div>
+<script>
+  (function(){
+    var root = document.getElementById('solo-reel-root');
+    var windowElement = root.querySelector('[data-solo-reel-window]');
+    var belt = root.querySelector('[data-solo-reel-belt]');
+    var groups = root.querySelectorAll('[data-solo-reel-set]');
+    var report = root.querySelector('[data-solo-reel-report]');
+    if(!windowElement || !belt || groups.length !== 1 || !report){
+      throw new Error('Standalone marquee requires one initial group, a viewport, a track, and a diagnostics panel.');
+    }
+
+    var firstGroup = groups[0];
+    var secondGroup = firstGroup.cloneNode(true);
+    secondGroup.setAttribute('aria-label','Group B');
+    secondGroup.setAttribute('aria-hidden','true');
+    belt.appendChild(secondGroup);
+
+    var animation = null;
+    var resizeFrame = 0;
+    var speed = 32;
+    var format = function(value){ return value.toFixed(1); };
+    var cardPositions = function(group){
+      return Array.prototype.map.call(group.querySelectorAll('.solo-reel-card'),function(card){
+        var rect = card.getBoundingClientRect();
+        return format(rect.left) + '–' + format(rect.right);
+      });
+    };
+    var cardGaps = function(group){
+      var cards = group.querySelectorAll('.solo-reel-card');
+      return Array.prototype.map.call(cards,function(card,index){
+        if(index === 0) return null;
+        return format(card.getBoundingClientRect().left - cards[index - 1].getBoundingClientRect().right);
+      }).filter(function(gap){ return gap !== null; });
+    };
+    var updateReport = function(distance){
+      var viewport = windowElement.getBoundingClientRect();
+      var groupA = firstGroup.getBoundingClientRect();
+      var groupB = secondGroup.getBoundingClientRect();
+      var lastA = firstGroup.lastElementChild.getBoundingClientRect();
+      var firstB = secondGroup.firstElementChild.getBoundingClientRect();
+      var boundaryGap = firstB.left - lastA.right;
+      report.textContent = [
+        'viewport ' + format(viewport.width) + 'px | Group A x=' + format(groupA.left) + ' width=' + format(groupA.width) + 'px | Group B x=' + format(groupB.left) + ' width=' + format(groupB.width) + 'px',
+        'Group A card x ranges: ' + cardPositions(firstGroup).join(' | '),
+        'Group B card x ranges: ' + cardPositions(secondGroup).join(' | '),
+        'Within-group gaps A: [' + cardGaps(firstGroup).join(', ') + ']px | A→B boundary gap: ' + format(boundaryGap) + 'px | Within-group gaps B: [' + cardGaps(secondGroup).join(', ') + ']px',
+        'Loop distance: ' + format(distance) + 'px (one measured group) | Speed: ' + speed + 'px/s | Duration: ' + format(distance / speed) + 's'
+      ].join('\n');
+    };
+    var measureAndAnimate = function(){
+      resizeFrame = 0;
+      var distance = firstGroup.getBoundingClientRect().width;
+      if(!windowElement.getBoundingClientRect().width || !distance){
+        throw new Error('Standalone marquee cannot measure a zero-width viewport or group.');
+      }
+      if(animation) animation.cancel();
+      animation = belt.animate(
+        [{transform:'translateX(0px)'},{transform:'translateX(-' + distance + 'px)'}],
+        {duration:distance / speed * 1000,iterations:Infinity,easing:'linear'}
+      );
+      updateReport(distance);
+    };
+    var scheduleMeasure = function(){
+      if(resizeFrame) return;
+      resizeFrame = window.requestAnimationFrame(measureAndAnimate);
+    };
+
+    scheduleMeasure();
+    window.addEventListener('resize',scheduleMeasure,{passive:true});
+    window.addEventListener('orientationchange',scheduleMeasure);
+    window.setInterval(function(){
+      updateReport(firstGroup.getBoundingClientRect().width);
+    },1000);
+  })();
+</script>
 
 <section class="testimonial-section" aria-label="Reader testimonials">
   <div class="testimonial-marquee is-paused" tabindex="0">
