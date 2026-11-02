@@ -223,59 +223,21 @@
   }
   .reveal-card.on .tag{opacity:0;}
 
-  .testimonial{
-    background:var(--bg-card); border:1px solid var(--line); border-radius:12px;
-    padding:clamp(1.5rem,4vw,2.5rem); max-width:640px; margin:0 auto;
-  }
-  .testimonial-slide{box-sizing:border-box; flex:0 0 590px; max-width:none; margin:0; white-space:normal; overflow-wrap:anywhere;}
-  .testimonial-section{padding:clamp(3.5rem,7vw,6rem) 0; border-top:1px solid var(--line);}
-  .testimonial-marquee{position:relative; isolation:isolate; overflow:hidden; width:100%; max-width:1100px; margin:0 auto; outline-offset:-4px;}
-  .testimonial-marquee::before,.testimonial-marquee::after{position:absolute; top:0; bottom:0; z-index:1; width:180px; content:""; pointer-events:none;}
-  .testimonial-marquee::before{left:0; background:linear-gradient(to right,rgba(20,24,27,1) 0%,rgba(20,24,27,0) 100%);}
-  .testimonial-marquee::after{right:0; background:linear-gradient(to left,rgba(20,24,27,1) 0%,rgba(20,24,27,0) 100%);}
-  .testimonial-track{position:relative; z-index:0; display:flex; width:max-content; animation:testimonial-scroll var(--testimonial-loop-duration,1s) linear infinite; will-change:transform;}
-  .testimonial-track.is-restarting{animation:none;}
-  .testimonial-group{display:flex; flex:0 0 auto; align-items:stretch; width:max-content;}
-  .testimonial-sequence{display:flex; flex:0 0 auto; align-items:stretch; gap:20px; width:max-content; padding-right:20px;}
-  .testimonial-marquee.is-paused .testimonial-track{animation-play-state:paused;}
-  @keyframes testimonial-scroll{from{transform:translate3d(0,0,0);}to{transform:translate3d(var(--testimonial-distance,0px),0,0);}}
-  @media(prefers-reduced-motion:reduce){.testimonial-marquee:not(.is-playing) .testimonial-track{animation-play-state:paused;}}
-  .testimonial-marquee.is-playing .testimonial-track{animation-play-state:running;}
-  @media(min-width:768px) and (hover:hover) and (pointer:fine){.testimonial-marquee:hover .testimonial-track,.testimonial-marquee:focus-visible .testimonial-track{animation-play-state:paused;}}
-  .testimonial-controls{max-width:1100px; margin:1rem auto 0; padding:0 24px; text-align:right;}
-  .testimonial-toggle{padding:.45rem .8rem; border:1px solid var(--line); border-radius:999px; background:transparent; color:var(--text-dim); font:inherit; font-size:.875rem; cursor:pointer;}
-  .testimonial-toggle:focus-visible{outline:2px solid var(--text); outline-offset:3px;}
-  @media(max-width:767px){
-    .testimonial-marquee{width:100vw; max-width:none; margin-left:calc(50% - 50vw);}
-    .testimonial-marquee::before,.testimonial-marquee::after{width:64px;}
-    .testimonial-slide{flex-basis:min(590px,calc(100vw - 3rem));}
-    .testimonial-controls{padding:0 24px;}
-  }
   section.final-cta-section{padding-top:4rem;}
   @media(min-width:768px){
     section.final-cta-section{padding-top:5.35rem;}
   }
-  .testimonial .flex > div p{margin:0;}
-  .testimonial .flex > div p + p{margin-top:2px;}
   .author-quote{margin:1.5rem 0 0; color:var(--text-dim); font-size:1rem; line-height:1.625; max-width:60ch;}
   .author-quote blockquote{margin:0;}
   .author-quote blockquote p{margin:0;}
   .author-quote blockquote p + p{margin-top:.75rem;}
   .author-quote figcaption{margin-top:.75rem; font-size:.875rem;}
-  .t-avatar{
-    width:48px; height:48px; border-radius:999px; object-fit:cover; flex-shrink:0;
-    clip-path:circle(43% at center);
-  }
-  .t-stars{color:#e0b84a; letter-spacing:.1em; margin-left:auto;}
-
   .solo-reel-root{
-    display:block; width:100%; max-width:none; margin:0; padding:3rem 0;
-    overflow:hidden; border-top:1px solid #2b3238; border-bottom:1px solid #2b3238;
+    display:block; width:100%; max-width:none; margin:0; padding:6rem 0 3rem;
+    overflow:hidden;
     background:#14181b; color:#f2f0ea; font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
   }
-  .solo-reel-heading{margin:0 24px 8px; color:#f2f0ea; font-size:1.125rem; font-weight:600; line-height:1.4;}
-  .solo-reel-caption{margin:0 24px 24px; color:#9aa0a3; font-size:.875rem; line-height:1.5;}
-  .solo-reel-window{position:relative; isolation:isolate; display:block; width:100%; max-width:1100px; margin:0 auto; overflow:hidden;}
+  .solo-reel-window{position:relative; isolation:isolate; display:block; width:100%; max-width:1200px; margin:0 auto; overflow:hidden;}
   .solo-reel-window:focus-visible{outline:2px solid #e0b84a; outline-offset:3px;}
   .solo-reel-window::before,.solo-reel-window::after{position:absolute; top:0; bottom:0; z-index:1; width:180px; content:""; pointer-events:none;}
   .solo-reel-window::before{left:0; background:linear-gradient(to right,rgba(20,24,27,1) 0%,rgba(20,24,27,0) 100%);}
@@ -285,7 +247,7 @@
   .solo-reel-card{
     display:block; box-sizing:border-box; flex:0 0 280px; width:280px; max-width:none; margin:0;
     padding:24px; border:1px solid #2b3238; border-radius:12px; background:#1e2529;
-    white-space:normal; overflow-wrap:anywhere;
+    white-space:normal; overflow-wrap:anywhere; -webkit-user-select:none; user-select:none;
   }
   .solo-reel-byline{display:flex; align-items:flex-start; gap:16px; margin:0 0 20px;}
   .solo-reel-avatar{
@@ -297,9 +259,6 @@
   .solo-reel-role{margin:2px 0 0; color:#9aa0a3; font-size:.875rem; line-height:1.25rem; white-space:nowrap; overflow-wrap:normal;}
   .solo-reel-stars{margin-left:auto; color:#e0b84a; letter-spacing:.1em; white-space:nowrap;}
   .solo-reel-quote{margin:0; color:#9aa0a3; font-size:1rem; line-height:1.625;}
-  .solo-reel-diagnostics{margin:24px 24px 0; color:#9aa0a3; font:12px/1.6 ui-monospace,SFMono-Regular,Consolas,monospace;}
-  .solo-reel-diagnostics-title{margin:0 0 6px; color:#f2f0ea; font:600 12px/1.5 Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;}
-  .solo-reel-report{display:block; max-width:100%; margin:0; white-space:pre-wrap; overflow-wrap:anywhere;}
   @media(min-width:768px){
     .solo-reel-card{flex-basis:590px; width:590px; padding:40px;}
     .solo-reel-quote{font-size:1.125rem;}
@@ -544,25 +503,7 @@
   </div>
 </section>
 
-<template id="testimonial-data">
-    <div class="testimonial testimonial-slide" data-testimonial-slide data-testimonial="hannu">
-      <div class="flex items-center gap-4 mb-5">
-        <img class="t-avatar" src="data:image/jpeg;base64,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" alt="Photo of Hannu">
-        <div>
-          <p class="font-bold">Hannu</p>
-          <p class="text-sm" style="color:var(--text-dim)">3D artist</p>
-        </div>
-        <span class="t-stars" aria-label="5 out of 5 stars">★★★★★</span>
-      </div>
-      <p class="text-base sm:text-lg leading-relaxed" style="color:var(--text-dim)">
-        After reading it, I found myself looking at composition from a unique perspective. The e-book is concise, clear, and full of useful examples. The ending especially stuck with me.
-      </p>
-    </div>
-</template>
-
-<div class="solo-reel-root" id="solo-reel-root" role="region" aria-labelledby="solo-reel-heading">
-  <h2 class="solo-reel-heading" id="solo-reel-heading">Standalone marquee test</h2>
-  <p class="solo-reel-caption">Independent full-width rebuild, outside the original testimonial layout. Compare this row with the original below. Hold the cards to slow the movement; release to return to its steady pace.</p>
+<section class="solo-reel-root" id="solo-reel-root" aria-label="Reader testimonials">
   <div class="solo-reel-window" data-solo-reel-window tabindex="0" aria-label="Testimonial carousel. Hold Space or Enter to slow.">
     <div class="solo-reel-belt" data-solo-reel-belt>
       <div class="solo-reel-set" data-solo-reel-set aria-label="Group A">
@@ -593,20 +534,15 @@
       </div>
     </div>
   </div>
-  <div class="solo-reel-diagnostics">
-    <p class="solo-reel-diagnostics-title">Live layout measurements (CSS pixels; x positions are viewport-relative)</p>
-    <pre class="solo-reel-report" data-solo-reel-report>Measuring both groups and the card-to-card boundary…</pre>
-  </div>
-</div>
+</section>
 <script>
   (function(){
     var root = document.getElementById('solo-reel-root');
     var windowElement = root.querySelector('[data-solo-reel-window]');
     var belt = root.querySelector('[data-solo-reel-belt]');
     var groups = root.querySelectorAll('[data-solo-reel-set]');
-    var report = root.querySelector('[data-solo-reel-report]');
-    if(!windowElement || !belt || groups.length !== 1 || !report){
-      throw new Error('Standalone marquee requires one initial group, a viewport, a track, and a diagnostics panel.');
+    if(!windowElement || !belt || groups.length !== 1){
+      throw new Error('Standalone marquee requires one initial group, a viewport, and a track.');
     }
 
     var firstGroup = groups[0];
@@ -623,35 +559,6 @@
     var updatePlaybackSpeed = function(){
       if(animation) animation.playbackRate = slowPointerId !== null || slowKeyHeld ? .5 : 1;
     };
-    var format = function(value){ return value.toFixed(1); };
-    var cardPositions = function(group){
-      return Array.prototype.map.call(group.querySelectorAll('.solo-reel-card'),function(card){
-        var rect = card.getBoundingClientRect();
-        return format(rect.left) + '–' + format(rect.right);
-      });
-    };
-    var cardGaps = function(group){
-      var cards = group.querySelectorAll('.solo-reel-card');
-      return Array.prototype.map.call(cards,function(card,index){
-        if(index === 0) return null;
-        return format(card.getBoundingClientRect().left - cards[index - 1].getBoundingClientRect().right);
-      }).filter(function(gap){ return gap !== null; });
-    };
-    var updateReport = function(distance){
-      var viewport = windowElement.getBoundingClientRect();
-      var groupA = firstGroup.getBoundingClientRect();
-      var groupB = secondGroup.getBoundingClientRect();
-      var lastA = firstGroup.lastElementChild.getBoundingClientRect();
-      var firstB = secondGroup.firstElementChild.getBoundingClientRect();
-      var boundaryGap = firstB.left - lastA.right;
-      report.textContent = [
-        'viewport ' + format(viewport.width) + 'px | Group A x=' + format(groupA.left) + ' width=' + format(groupA.width) + 'px | Group B x=' + format(groupB.left) + ' width=' + format(groupB.width) + 'px',
-        'Group A card x ranges: ' + cardPositions(firstGroup).join(' | '),
-        'Group B card x ranges: ' + cardPositions(secondGroup).join(' | '),
-        'Within-group gaps A: [' + cardGaps(firstGroup).join(', ') + ']px | A→B boundary gap: ' + format(boundaryGap) + 'px | Within-group gaps B: [' + cardGaps(secondGroup).join(', ') + ']px',
-        'Loop distance: ' + format(distance) + 'px (one measured group) | Speed: ' + speed + 'px/s | Duration: ' + format(distance / speed) + 's'
-      ].join('\n');
-    };
     var measureAndAnimate = function(){
       resizeFrame = 0;
       var currentOffset = animation ? belt.getBoundingClientRect().left - windowElement.getBoundingClientRect().left : 0;
@@ -665,7 +572,6 @@
         {duration:distance / speed * 1000,iterations:Infinity,easing:'linear'}
       );
       updatePlaybackSpeed();
-      updateReport(distance);
     };
     var scheduleMeasure = function(){
       if(resizeFrame) return;
@@ -703,23 +609,8 @@
       slowKeyHeld = false;
       updatePlaybackSpeed();
     });
-    window.setInterval(function(){
-      updateReport(firstGroup.getBoundingClientRect().width);
-    },1000);
   })();
 </script>
-
-<section class="testimonial-section" aria-label="Reader testimonials">
-  <div class="testimonial-marquee is-paused" tabindex="0">
-    <div class="testimonial-track" id="testimonial-track">
-      <div class="testimonial-group" data-testimonial-group></div>
-      <div class="testimonial-group" data-testimonial-group aria-hidden="true"></div>
-    </div>
-  </div>
-  <div class="testimonial-controls">
-    <button class="testimonial-toggle" type="button" data-testimonial-toggle aria-pressed="false">Pause testimonials</button>
-  </div>
-</section>
 
 <!-- FINAL CTA -->
 <section class="py-24 md:py-32 final-cta-section">
@@ -833,137 +724,6 @@
     },true);
   })();
 
-  // Build two equal groups and animate exactly one measured group per loop.
-  (function(){
-    var template = document.getElementById('testimonial-data');
-    var marquee = document.querySelector('.testimonial-marquee');
-    var track = document.getElementById('testimonial-track');
-    var groups = track ? track.querySelectorAll('[data-testimonial-group]') : [];
-    var pauseButton = document.querySelector('[data-testimonial-toggle]');
-    if(!template || !marquee || !track || groups.length !== 2 || !pauseButton) return;
-
-    var content = template.content;
-    var original = content.querySelector('[data-testimonial-slide]');
-    if(!original) return;
-    var testimonials = [
-      {
-        name:'Adi',
-        role:'3D artist',
-        image:'assets/adi.png',
-        quote:'I love how you explain the relationships between shapes, patterns, proportions, and visual balance. It helps you understand why something is visually appealing.'
-      },
-      {
-        name:'Dor',
-        role:'Photographer',
-        image:'assets/dor.png',
-        quote:'It’s beautiful, easy to read, and easy to follow. I already approached composition in a similar way, but never to this level of detail. You’re teaching a skill. It’s like teaching someone to fish.'
-      }
-    ];
-    var cards = [original];
-    testimonials.forEach(function(testimonial){
-      var slide = original.cloneNode(true);
-      var avatar = slide.querySelector('.t-avatar');
-      var details = slide.querySelector('.flex > div');
-      slide.setAttribute('data-testimonial', testimonial.name.toLowerCase());
-      avatar.src = testimonial.image;
-      avatar.alt = 'Photo of ' + testimonial.name;
-      details.querySelector('.font-bold').textContent = testimonial.name;
-      details.querySelector('.text-sm').textContent = testimonial.role;
-      slide.querySelector('.leading-relaxed').textContent = testimonial.quote;
-      cards.push(slide);
-    });
-
-    var createSequence = function(groupIndex,sequenceIndex){
-      var sequence = document.createElement('div');
-      sequence.className = 'testimonial-sequence';
-      sequence.setAttribute('data-testimonial-sequence','');
-      if(groupIndex > 0 || sequenceIndex > 0) sequence.setAttribute('aria-hidden','true');
-      cards.forEach(function(card){
-        sequence.appendChild(card.cloneNode(true));
-      });
-      return sequence;
-    };
-    var setSequenceCount = function(group,count,groupIndex){
-      while(group.children.length > count) group.removeChild(group.lastElementChild);
-      while(group.children.length < count) group.appendChild(createSequence(groupIndex,group.children.length));
-    };
-
-    var sequenceWidth = 0;
-    var lastViewportWidth = 0;
-    var lastDistance = 0;
-    var animationFrame = 0;
-    var paused = false;
-    var reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
-    var speed = 32;
-
-    groups.forEach(function(group,index){ setSequenceCount(group,1,index); });
-
-    var setPaused = function(value){
-      paused = value;
-      marquee.classList.toggle('is-paused',paused);
-      marquee.classList.toggle('is-playing',!paused);
-      pauseButton.textContent = paused ? 'Resume testimonials' : 'Pause testimonials';
-      pauseButton.setAttribute('aria-pressed',String(paused));
-    };
-
-    var measure = function(){
-      animationFrame = 0;
-      var viewportWidth = marquee.getBoundingClientRect().width;
-      var firstSequence = groups[0].firstElementChild;
-      var firstSequenceWidth = firstSequence ? firstSequence.getBoundingClientRect().width : 0;
-      if(!viewportWidth || !firstSequenceWidth) return;
-
-      var count = Math.max(1,Math.ceil(viewportWidth / firstSequenceWidth));
-      groups.forEach(function(group,index){ setSequenceCount(group,count,index); });
-      var distance = groups[0].getBoundingClientRect().width;
-      while(distance < viewportWidth){
-        count += 1;
-        groups.forEach(function(group,index){ setSequenceCount(group,count,index); });
-        distance = groups[0].getBoundingClientRect().width;
-      }
-
-      if(Math.abs(viewportWidth - lastViewportWidth) < .1 &&
-         Math.abs(firstSequenceWidth - sequenceWidth) < .1 &&
-         Math.abs(distance - lastDistance) < .1) return;
-
-      sequenceWidth = firstSequenceWidth;
-      lastViewportWidth = viewportWidth;
-      lastDistance = distance;
-      track.classList.add('is-restarting');
-      track.style.setProperty('--testimonial-distance',-distance + 'px');
-      track.style.setProperty('--testimonial-loop-duration',distance / speed + 's');
-      track.offsetWidth;
-      track.classList.remove('is-restarting');
-    };
-
-    var scheduleMeasure = function(){
-      if(animationFrame) return;
-      animationFrame = window.requestAnimationFrame(measure);
-    };
-
-    setPaused(reducedMotion.matches);
-    measure();
-    window.addEventListener('resize',scheduleMeasure,{passive:true});
-    window.addEventListener('orientationchange',scheduleMeasure);
-    if(window.visualViewport) window.visualViewport.addEventListener('resize',scheduleMeasure,{passive:true});
-    pauseButton.addEventListener('click',function(){ setPaused(!paused); });
-    if(reducedMotion.addEventListener){
-      reducedMotion.addEventListener('change',function(event){ if(event.matches) setPaused(true); });
-    } else if(reducedMotion.addListener){
-      reducedMotion.addListener(function(event){ if(event.matches) setPaused(true); });
-    }
-
-    if(document.fonts){
-      document.fonts.ready.then(scheduleMeasure);
-      if(document.fonts.addEventListener) document.fonts.addEventListener('loadingdone',scheduleMeasure);
-    }
-
-    if('ResizeObserver' in window){
-      var resizeObserver = new ResizeObserver(scheduleMeasure);
-      resizeObserver.observe(marquee);
-      resizeObserver.observe(groups[0].querySelector('.testimonial-slide'));
-    }
-  })();
 
   // scroll reveal
   (function(){
