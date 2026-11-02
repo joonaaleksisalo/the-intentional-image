@@ -238,7 +238,7 @@
   .testimonial-group{display:flex; flex:0 0 auto; align-items:stretch; width:max-content;}
   .testimonial-sequence{display:flex; flex:0 0 auto; align-items:stretch; gap:20px; width:max-content; padding-right:20px;}
   .testimonial-marquee.is-paused .testimonial-track{animation-play-state:paused;}
-  @keyframes testimonial-scroll{to{transform:translate3d(var(--testimonial-distance,0px),0,0);}}
+  @keyframes testimonial-scroll{from{transform:translate3d(0,0,0);}to{transform:translate3d(var(--testimonial-distance,0px),0,0);}}
   @media(prefers-reduced-motion:reduce){.testimonial-marquee:not(.is-playing) .testimonial-track{animation-play-state:paused;}}
   .testimonial-marquee.is-playing .testimonial-track{animation-play-state:running;}
   @media(min-width:768px) and (hover:hover) and (pointer:fine){.testimonial-marquee:hover .testimonial-track,.testimonial-marquee:focus-visible .testimonial-track{animation-play-state:paused;}}
@@ -275,22 +275,25 @@
   }
   .solo-reel-heading{margin:0 24px 8px; color:#f2f0ea; font-size:1.125rem; font-weight:600; line-height:1.4;}
   .solo-reel-caption{margin:0 24px 24px; color:#9aa0a3; font-size:.875rem; line-height:1.5;}
-  .solo-reel-window{display:block; width:100%; overflow:hidden;}
-  .solo-reel-belt{display:flex; width:max-content; align-items:stretch; transform:translateX(0);}
+  .solo-reel-window{position:relative; isolation:isolate; display:block; width:100%; max-width:1100px; margin:0 auto; overflow:hidden;}
+  .solo-reel-window::before,.solo-reel-window::after{position:absolute; top:0; bottom:0; z-index:1; width:180px; content:""; pointer-events:none;}
+  .solo-reel-window::before{left:0; background:linear-gradient(to right,rgba(20,24,27,1) 0%,rgba(20,24,27,0) 100%);}
+  .solo-reel-window::after{right:0; background:linear-gradient(to left,rgba(20,24,27,1) 0%,rgba(20,24,27,0) 100%);}
+  .solo-reel-belt{position:relative; z-index:0; display:flex; width:max-content; align-items:stretch; transform:translateX(0);}
   .solo-reel-set{display:flex; flex:0 0 auto; align-items:stretch; gap:20px; width:max-content; padding-right:20px;}
   .solo-reel-card{
     display:block; box-sizing:border-box; flex:0 0 280px; width:280px; max-width:none; margin:0;
     padding:24px; border:1px solid #2b3238; border-radius:12px; background:#1e2529;
     white-space:normal; overflow-wrap:anywhere;
   }
-  .solo-reel-byline{display:flex; align-items:center; gap:16px; margin:0 0 20px;}
+  .solo-reel-byline{display:flex; align-items:flex-start; gap:16px; margin:0 0 20px;}
   .solo-reel-avatar{
     display:block; flex:0 0 48px; width:48px; height:48px; border-radius:50%;
     object-fit:cover; clip-path:circle(43% at center);
   }
   .solo-reel-identity{min-width:0;}
   .solo-reel-name{margin:0; color:#f2f0ea; font-size:1rem; font-weight:700; line-height:1.5;}
-  .solo-reel-role{margin:2px 0 0; color:#9aa0a3; font-size:.875rem; line-height:1.25rem;}
+  .solo-reel-role{margin:2px 0 0; color:#9aa0a3; font-size:.875rem; line-height:1.25rem; white-space:nowrap; overflow-wrap:normal;}
   .solo-reel-stars{margin-left:auto; color:#e0b84a; letter-spacing:.1em; white-space:nowrap;}
   .solo-reel-quote{margin:0; color:#9aa0a3; font-size:1rem; line-height:1.625;}
   .solo-reel-diagnostics{margin:24px 24px 0; color:#9aa0a3; font:12px/1.6 ui-monospace,SFMono-Regular,Consolas,monospace;}
@@ -299,6 +302,10 @@
   @media(min-width:768px){
     .solo-reel-card{flex-basis:590px; width:590px; padding:40px;}
     .solo-reel-quote{font-size:1.125rem;}
+  }
+  @media(max-width:767px){
+    .solo-reel-window::before,.solo-reel-window::after{width:64px;}
+    .solo-reel-card{flex-basis:320px; width:320px;}
   }
 
   .chapter{border-top:1px solid var(--line); padding:26px 0;}
@@ -577,7 +584,7 @@
         <article class="solo-reel-card">
           <div class="solo-reel-byline">
             <img class="solo-reel-avatar" src="assets/dor.png" width="48" height="48" alt="Photo of Dor">
-            <div class="solo-reel-identity"><p class="solo-reel-name">Dor</p><p class="solo-reel-role">Web designer</p></div>
+            <div class="solo-reel-identity"><p class="solo-reel-name">Dor</p><p class="solo-reel-role">Photographer</p></div>
             <span class="solo-reel-stars" aria-label="5 out of 5 stars">★★★★★</span>
           </div>
           <p class="solo-reel-quote">It’s beautiful, easy to read, and easy to follow. I already approached composition in a similar way, but never to this level of detail. You’re teaching a skill. It’s like teaching someone to fish.</p>
@@ -811,7 +818,7 @@
       },
       {
         name:'Dor',
-        role:'Web designer',
+        role:'Photographer',
         image:'assets/dor.png',
         quote:'It’s beautiful, easy to read, and easy to follow. I already approached composition in a similar way, but never to this level of detail. You’re teaching a skill. It’s like teaching someone to fish.'
       }
