@@ -1,8 +1,7 @@
 {
-  "name": "the-intentional-image-dev",
-  "compatibility_date": "2026-10-06",
+  "name": "the-intentional-image",
+  "compatibility_date": "2026-11-02",
   "assets": {
-    "directory": "."
-  },
-  "previews": {}
+    "directory": "./"
+  }
 }
