@@ -67,10 +67,11 @@
   }
   .btn-ghost:hover{transform:translateY(-2px); border-color:var(--text-dim); background:rgba(242,240,234,.035);}
   .details-separator{display:inline-block; margin:0 .75em; white-space:nowrap;}
-  .purchase-ticker{position:relative; z-index:8; display:flex; align-items:center; height:48px; overflow:hidden; padding:0; background:linear-gradient(180deg,rgba(255,255,255,.045),rgba(255,255,255,.015)),rgba(34,40,44,.82); -webkit-backdrop-filter:blur(12px) saturate(120%); backdrop-filter:blur(12px) saturate(120%); border-top:1px solid rgba(242,240,234,.08); border-bottom:1px solid rgba(242,240,234,.07); box-shadow:inset 0 .5px rgba(255,255,255,.035);}
+  .purchase-ticker{position:relative; z-index:8; display:flex; align-items:center; height:48px; overflow:hidden; padding:0; background:var(--bg-alt); border-bottom:1px solid var(--line);}
   .ticker-track{display:flex; width:max-content; animation:ticker-scroll 44s linear infinite;}
   .ticker-group{display:flex; flex:0 0 auto; align-items:center;}
   .ticker-copy{flex:0 0 auto; padding:0 1.5rem; color:#c5e86c; font-size:12px; font-weight:600; white-space:nowrap;}
+  .ticker-copy .details-separator{margin:0 .9375em;}
   .ticker-copy [data-gumroad-field="price"]::after{content:" USD";}
   .purchase-ticker:hover .ticker-track{animation-play-state:paused;}
   @keyframes ticker-scroll{to{transform:translateX(-50%);}}
@@ -137,6 +138,8 @@
   }
   @media(min-width:768px){.consent-backdrop{display:none;}}
 
+  h2{letter-spacing:-.02em;}
+  .included-intro{line-height:1.6;}
   .btn-buy:focus-visible, .btn-ghost:focus-visible, .reveal-card:focus-visible{outline:3px solid #e0b84a; outline-offset:4px;}
   .hero-section{
     min-height:86vh;
@@ -158,7 +161,7 @@
     font-size:clamp(3.1rem, 7.5vw, 6.8rem);
     font-weight:750;
     line-height:.93;
-    letter-spacing:-.075em;
+    letter-spacing:-.06em;
   }
   .hero-title span{display:block;}
   .hero-title em{color:#c5e86c; font-family:var(--serif); font-weight:700; font-style:normal; letter-spacing:-.06em;}
@@ -247,7 +250,7 @@
   .solo-reel-set{display:flex; flex:0 0 auto; align-items:stretch; gap:20px; width:max-content; padding-right:20px;}
   .solo-reel-card{
     display:block; box-sizing:border-box; flex:0 0 280px; width:280px; max-width:none; margin:0;
-    padding:24px; border:1px solid #2b3238; border-radius:12px; background:#1e2529;
+    padding:24px; border:1px solid #2b3238; border-radius:12px; background:var(--bg-alt);
     white-space:normal; overflow-wrap:anywhere; -webkit-user-select:none; user-select:none;
   }
   .solo-reel-byline{display:flex; align-items:flex-start; gap:16px; margin:0 0 20px;}
@@ -396,7 +399,7 @@
   <div class="wrap">
     <div class="reveal mb-12 max-w-xl mx-auto text-center">
       <h2 class="serif font-bold text-3xl sm:text-4xl mb-4">Make better images</h2>
-      <p class="composition-copy" style="color:var(--text-dim)">Tap an image for a glimpse into its composition. The book gives you a framework to do the same.</p>
+      <p class="composition-copy included-intro" style="color:var(--text-dim)">Tap an image for a glimpse into its composition. The book gives you a framework to do the same.</p>
     </div>
     <div class="grid sm:grid-cols-2 gap-6">
       <div class="reveal-card reveal" role="button" aria-label="Composition study: activate to reveal the finished image" aria-pressed="false" tabindex="0">
@@ -418,7 +421,7 @@
   <div class="wrap">
     <div class="reveal mb-4 max-w-xl">
       <h2 class="serif font-bold text-3xl sm:text-4xl mb-4">What's included</h2>
-      <p style="color:var(--text-dim)">A complete framework for seeing composition differently. 30 pages, broken down frame by frame. Not a checklist of rules you already know. A way of seeing you build for yourself.</p>
+      <p class="included-intro" style="color:var(--text-dim)">A complete framework for seeing composition differently. 30 pages, broken down frame by frame. Not a checklist of rules you already know. A way of seeing you build for yourself.</p>
     </div>
     <div class="mt-10 reveal">
       <div class="chapter flex items-baseline justify-between gap-6">
